@@ -4,7 +4,7 @@ import random
 pygame.init()
 menuHeight = 500
 menuWidth = 800
-refreshRate = 60
+refreshRate = 120
 
 width = 0
 height = 0
@@ -17,11 +17,12 @@ pygame.display.set_caption('Minesweeper')
 rows,cols,mines = 0,0,0
 
 #loading image assets
-start_img = pygame.image.load('images/start_btn.png').convert_alpha()
+button_img = pygame.image.load('images/start_btn.png').convert_alpha()
 exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
 beginner_img = pygame.image.load('images/button_resume.png').convert_alpha()
 square_img = pygame.image.load('images/square.png').convert_alpha()
 mine_img = pygame.image.load('images/mine.png').convert_alpha()
+flag_img = pygame.image.load('images/flag.png').convert_alpha()
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -29,18 +30,28 @@ loadGame = False #to setup game
 minefield = None #stores the minefield (-1 for mine), pre laced with mine counts
 playerField = None #the field that the player sees, 0 for unrevealed, 1 for revealed, 2 for flagged
 gameOver = False #triggers when player steps on a mine
-font = pygame.font.Font('munro.ttf', 30) 
-textRect = None
+font = pygame.font.Font('freesansbold.ttf', 30) 
+textRect = None 
 
 
 class button(): #general button class
-    def __init__(self, x, y, image,scale):
+    def __init__(self, x, y, image, scale):
         width = image.get_width()
         height = image.get_height()
         self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
+        self.normalImage = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
+
+        self.center = (int(x+width/2), int(y+height/2))
+
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
+        
         self.clicked = False
+        self.img_scaled = pygame.transform.scale(image, (int(width * 1.1 * scale), int(height * 1.1 * scale)))
+
+        self.scaledRect = self.img_scaled.get_rect()
+        self.scaledRect.topleft = (x-(0.1*width)/2, y - (0.1*height)/2)
+
 
     def draw(self):
         action = False
@@ -49,16 +60,21 @@ class button(): #general button class
 
         #check if mouse is over button
         if self.rect.collidepoint(pos) == True:
+            screen.blit(self.img_scaled, (self.scaledRect.x, self.scaledRect.y))
+
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
+        else:
+            screen.blit(self.image, (self.rect.x, self.rect.y))
 
         if pygame.mouse.get_pressed()[0] ==  0:
             self.clicked = False
+            
 
-        screen.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
+    
 class square(): #dimensions of a square will be 30x30
     def __init__(self, x, y, image):
         self.imageAsset = image
@@ -70,7 +86,8 @@ class square(): #dimensions of a square will be 30x30
         screen.blit(self.image, (self.rect.x,self.rect.y))
 
 
-startButton = button(100, 200, start_img,0.75)
+
+startButton = button(100, 200, button_img,0.75)
 exitButton = button(500, 200, exit_img, 0.75)
 beginnerButton = button(300, 200, beginner_img, 1)
 
@@ -128,6 +145,12 @@ def drawField(): #render the board
                 x_cord = x*30
                 mine = square(x_cord, y_cord+100,mine_img)
                 mine.draw()
+            if playerField[y][x] == 2:
+                y_cord = y*30
+                x_cord = x*30
+                mine = square(x_cord, y_cord+100,flag_img)
+                mine.draw()
+
             
 
     pass
@@ -194,8 +217,8 @@ def revealAllAdjacent(row,col): #meant to reveal all 8 squares around an empty s
     global rows
     global cols
     neighbours = findNeighbours(row,col,rows,cols) #find all neighbours
-    
-    playerField[row][col] = 1
+
+    playerField[row][col] = 1 #set square to be revealed
 
     for r,c in neighbours: #loop through
         if playerField[r][c] == 0:
@@ -206,7 +229,11 @@ def revealAllAdjacent(row,col): #meant to reveal all 8 squares around an empty s
 def leftClick(row,col): #clicks square to reveal
     global gameOver
     global playerField
-    print('value', playerField[row][col])
+
+    try:
+        print('value', playerField[row][col])
+    except:
+        return
 
     if minefield[row][col] <=  -1: #stepped on a mine
         gameOver = True
@@ -220,6 +247,18 @@ def leftClick(row,col): #clicks square to reveal
 
 def rightClick(row,col):
     global playerField
+
+    try:
+        print('flagged', row,col)
+        playerField[row][col]
+    except:
+        return
+
+    if playerField[row][col] == 1:
+        return
+    if playerField[row][col] == 2:
+        playerField[row][col] = 0
+        return
     playerField[row][col] = 2
 
 def getClickedCords(clickPos):
@@ -240,7 +279,7 @@ def getClickedCords(clickPos):
 #main game loop 
 clock = pygame.time.Clock()
 run = True
-pygame.time.set_timer(pygame.USEREVENT, 1000)
+pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
 while run:
 
@@ -255,11 +294,13 @@ while run:
     else:
         if loadDifficultySelect == False: #
             if beginnerButton.draw() == True:
-                difficulty = 'intermediate'
+                difficulty = 'advanced'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
                 print(time_in_menu)
+                pygame.time.delay(75)
+            
 
         if loadGame == True: #commands for when game has been started
             drawField()
@@ -270,17 +311,25 @@ while run:
     
     for event in pygame.event.get():
         clock.tick(refreshRate)
+        mouse = pygame.mouse.get_pressed()
         if event.type == pygame.USEREVENT:
             time += 1
         if event.type == pygame.QUIT:
-            run = False
-        if loadGame == True and event.type == pygame.MOUSEBUTTONDOWN:
+            run = False 
+        if loadGame == True and mouse[0]: #detect left click 
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
             if row > rows or cols > cols:
                 continue
             leftClick(row,col)
-            print(row,col)
+            print('revealed',row,col)
+
+        if loadGame == True and mouse[2]: #detect right click and place flag
+            mousePos = pygame.mouse.get_pos()
+            row,col = getClickedCords(mousePos)
+            rightClick(row,col)
+            print('flagged',row,col)
+            pygame.time.delay(75)
 
     pygame.display.update()
 
