@@ -17,7 +17,7 @@ pygame.display.set_caption('Minesweeper')
 rows,cols,mines = 0,0,0
 
 #loading image assets
-button_img = pygame.image.load('images/start_btn.png').convert_alpha()
+start_img = pygame.image.load('images/start_btn.png').convert_alpha()
 exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
 beginner_img = pygame.image.load('images/button_resume.png').convert_alpha()
 square_img = pygame.image.load('images/square.png').convert_alpha()
@@ -59,18 +59,6 @@ class button(): #general button class
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
-    def hovereffect(self, image):
-        mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
-            img_scaled = pygame.transform.scale(image, (image.get_width() * 2, image.get_height() * 2))
-            img_rect = img_scaled.get_rect(center=img_rect.center)
-        else:
-            img_scaled = image
-            img_rect = img_scaled.get_rect(center=img_rect.center)
-        
-        screen.blit(img_scaled, img_rect)
-        
-        pygame.display.update()
 class square(): #dimensions of a square will be 30x30
     def __init__(self, x, y, image):
         self.imageAsset = image
@@ -82,8 +70,7 @@ class square(): #dimensions of a square will be 30x30
         screen.blit(self.image, (self.rect.x,self.rect.y))
 
 
-
-startButton = button(100, 200, button_img,0.75)
+startButton = button(100, 200, start_img,0.75)
 exitButton = button(500, 200, exit_img, 0.75)
 beginnerButton = button(300, 200, beginner_img, 1)
 
