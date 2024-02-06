@@ -23,6 +23,7 @@ beginner_img = pygame.image.load('images/button_resume.png').convert_alpha()
 square_img = pygame.image.load('images/square.png').convert_alpha()
 mine_img = pygame.image.load('images/mine.png').convert_alpha()
 flag_img = pygame.image.load('images/flag.png').convert_alpha()
+clock_img = pygame.image.load('images/clock.png').convert_alpha()
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -30,7 +31,7 @@ loadGame = False #to setup game
 minefield = None #stores the minefield (-1 for mine), pre laced with mine counts
 playerField = None #the field that the player sees, 0 for unrevealed, 1 for revealed, 2 for flagged
 gameOver = False #triggers when player steps on a mine
-font = pygame.font.Font('freesansbold.ttf', 30) 
+font = pygame.font.Font('munro.ttf', 30) 
 textRect = None 
 
 
@@ -40,7 +41,6 @@ class button(): #general button class
         height = image.get_height()
         self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
         self.normalImage = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
-
         self.center = (int(x+width/2), int(y+height/2))
 
         self.rect = self.image.get_rect()
@@ -87,10 +87,12 @@ class square(): #dimensions of a square will be 30x30
 
 
 
-startButton = button(100, 200, button_img,0.75)
-exitButton = button(500, 200, exit_img, 0.75)
+startButton = button(310, 250, button_img, 1.5)
+exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 
+
+#how big is the image in pixels
 def setupGame(difficulty):  
 
     global rows
@@ -157,11 +159,17 @@ def drawField(): #render the board
     #perhaps make it so that when player clicks, the box dissapears and reveals number below it?
 
 def drawTopPanel():
+    global clock_img
     global textRect
     timeText = font.render(str(time), True, (137, 207, 240))
     textRect = timeText.get_rect()
-    textRect.center = (50, 50)
+    textRect.center = (100, 50)
     screen.blit(timeText, textRect)
+    clock_img2 = pygame.transform.scale(clock_img, (int(clock_img.get_width()*0.20), int(clock_img.get_height()*0.20)))
+    clockRect = clock_img2.get_rect()
+    clockRect.center = (50,50)
+    
+    screen.blit(clock_img2, clockRect)
 
 
 def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
