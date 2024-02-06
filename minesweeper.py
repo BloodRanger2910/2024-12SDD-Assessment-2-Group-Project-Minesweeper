@@ -33,6 +33,7 @@ playerField = None #the field that the player sees, 0 for unrevealed, 1 for reve
 gameOver = False #triggers when player steps on a mine
 font = pygame.font.Font('munro.ttf', 30) 
 textRect = None 
+flagsPlaced = 0
 
 
 class button(): #general button class
@@ -160,16 +161,22 @@ def drawField(): #render the board
 
 def drawTopPanel():
     global clock_img
-    global textRect
-    timeText = font.render(str(time), True, (137, 207, 240))
+    
+    timeText = font.render(str(time), True, (0,0,0))
     textRect = timeText.get_rect()
     textRect.center = (100, 50)
     screen.blit(timeText, textRect)
+
     clock_img2 = pygame.transform.scale(clock_img, (int(clock_img.get_width()*0.20), int(clock_img.get_height()*0.20)))
     clockRect = clock_img2.get_rect()
     clockRect.center = (50,50)
-    
     screen.blit(clock_img2, clockRect)
+
+    flagsText = font.render(str(mines-flagsPlaced), True, (0,0,0))
+    flagsTextRect = flagsText.get_rect()
+    textRect.center = (50,50)
+    screen.blit(flagsText,flagsTextRect)
+
 
 
 def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
@@ -242,6 +249,9 @@ def leftClick(row,col): #clicks square to reveal
         print('value', playerField[row][col])
     except:
         return
+    
+    if row < 0 or col < 0:
+        return
 
     if minefield[row][col] <=  -1: #stepped on a mine
         gameOver = True
@@ -255,19 +265,26 @@ def leftClick(row,col): #clicks square to reveal
 
 def rightClick(row,col):
     global playerField
+    global flagsPlaced
 
     try:
         print('flagged', row,col)
         playerField[row][col]
     except:
         return
-
+    
+    if row < 0 or col < 0:
+        return
+    
     if playerField[row][col] == 1:
         return
     if playerField[row][col] == 2:
         playerField[row][col] = 0
+        flagsPlaced -= 1
         return
+    
     playerField[row][col] = 2
+    flagsPlaced += 1
 
 def getClickedCords(clickPos):
     global minefield
