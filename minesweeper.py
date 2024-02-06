@@ -25,6 +25,8 @@ mine_img = pygame.image.load('images/mine.png').convert_alpha()
 flag_img = pygame.image.load('images/flag.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
+darkgreen_tile = pygame.image.load('images/darkgreen_tile.png').convert_alpha()
+lightgreen_tile = pygame.image.load('images/lightgreen_tile.png').convert_alpha()
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -139,21 +141,32 @@ def drawField(): #render the board
 
     for y, row in enumerate(playerField): #y is the number of squares deep (y-direction) the square is at
         for x, col in enumerate(row):  #x is the number of squares across (x-direction) the square is at
-            if playerField[y][x] == 0:
+            if playerField[y][x] == 0  or playerField[y][x] == 2:
                 y_cord = y*30
                 x_cord = x*30
-                box = square(x_cord, y_cord+100,square_img)
+                if y%2 == 0:
+                    if x%2 == 0:
+                        box = square(x_cord, y_cord+100,darkgreen_tile)
+                        box.draw()
+                    else:
+                        box = square(x_cord, y_cord+100,lightgreen_tile)
+                else:
+                    if x%2 != 0:
+                        box = square(x_cord, y_cord+100,darkgreen_tile)
+                    else:
+                        box = square(x_cord, y_cord+100,lightgreen_tile)
                 box.draw()
+
             if minefield[y][x] == -1:
                 y_cord = y*30
                 x_cord = x*30
                 mine = square(x_cord, y_cord+100,mine_img)
                 mine.draw()
+
+            
             if playerField[y][x] == 2:
                 y_cord = y*30
                 x_cord = x*30
-                mine = square(x_cord, y_cord+100,square_img)
-                mine.draw()
 
                 scaledFlag = pygame.transform.scale(flag_custom_img, (int(flag_custom_img.get_width()*0.75), int(flag_custom_img.get_height()*0.75)))
                 flag = square(x_cord, y_cord+100,flag_custom_img)
@@ -334,7 +347,7 @@ while run:
                 loadGame = True
                 setupGame(difficulty) #initalises the board
                 print(time_in_menu)
-                pygame.time.delay(75)
+                pygame.time.delay(30)
             
 
         if loadGame == True: #commands for when game has been started
@@ -364,7 +377,7 @@ while run:
             row,col = getClickedCords(mousePos)
             rightClick(row,col)
             print('flagged',row,col)
-            pygame.time.delay(75)
+            pygame.time.delay(30)
 
     pygame.display.update()
 
