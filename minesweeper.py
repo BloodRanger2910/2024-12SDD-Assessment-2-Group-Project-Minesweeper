@@ -24,6 +24,7 @@ square_img = pygame.image.load('images/square.png').convert_alpha()
 mine_img = pygame.image.load('images/mine.png').convert_alpha()
 flag_img = pygame.image.load('images/flag.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
+flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -151,8 +152,12 @@ def drawField(): #render the board
             if playerField[y][x] == 2:
                 y_cord = y*30
                 x_cord = x*30
-                mine = square(x_cord, y_cord+100,flag_img)
+                mine = square(x_cord, y_cord+100,square_img)
                 mine.draw()
+
+                scaledFlag = pygame.transform.scale(flag_custom_img, (int(flag_custom_img.get_width()*0.75), int(flag_custom_img.get_height()*0.75)))
+                flag = square(x_cord, y_cord+100,flag_custom_img)
+                flag.draw()
 
             
 
@@ -174,8 +179,13 @@ def drawTopPanel():
 
     flagsText = font.render(str(mines-flagsPlaced), True, (0,0,0))
     flagsTextRect = flagsText.get_rect()
-    textRect.center = (50,50)
+    flagsTextRect.center = (200,50)
     screen.blit(flagsText,flagsTextRect)
+
+    flagImg = pygame.transform.scale(flag_custom_img, (int(flag_custom_img.get_width()), int(flag_custom_img.get_height())))
+    flagRect = flagImg.get_rect()
+    flagRect.center = (150,50)
+    screen.blit(flagImg, flagRect)
 
 
 
