@@ -38,6 +38,7 @@ font = pygame.font.Font('munro.ttf', 30)
 textRect = None 
 flagsPlaced = 0
 displayEndGame = False
+firstClickDone = False
 
 
 class button(): #general button class
@@ -268,6 +269,8 @@ def leftClick(row,col): #clicks square to reveal
     global gameOver
     global playerField
     global loadGame
+    global firstClickDone
+    global minefield
 
     try:
         print('value', playerField[row][col])
@@ -276,7 +279,12 @@ def leftClick(row,col): #clicks square to reveal
     
     if row < 0 or col < 0:
         return
+    
+    while not firstClickDone and minefield[row][col] <=  -1:
+        minefield = generateGrid(rows, cols, mines)
 
+    firstClickDone = True
+        
     if minefield[row][col] <=  -1: #stepped on a mine
         gameOver = True
         print('mine!')
@@ -357,7 +365,7 @@ while run:
                 loadGame = True
                 setupGame(difficulty) #initalises the board
                 print(time_in_menu)
-                pygame.time.delay(30)
+                pygame.time.delay(75)
             
         if loadGame: #commands for when game has been started
             drawField()
