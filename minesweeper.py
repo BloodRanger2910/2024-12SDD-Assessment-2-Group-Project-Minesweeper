@@ -168,7 +168,6 @@ def drawField(): #render the board
                 y_cord = y*30
                 x_cord = x*30
 
-                scaledFlag = pygame.transform.scale(flag_custom_img, (int(flag_custom_img.get_width()*0.75), int(flag_custom_img.get_height()*0.75)))
                 flag = square(x_cord, y_cord+100,flag_custom_img)
                 flag.draw()
 
