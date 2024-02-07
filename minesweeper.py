@@ -37,6 +37,7 @@ gameOver = False #triggers when player steps on a mine
 font = pygame.font.Font('munro.ttf', 30) 
 textRect = None 
 flagsPlaced = 0
+displayEndGame = False
 
 
 class button(): #general button class
@@ -266,6 +267,7 @@ def revealAllAdjacent(row,col): #meant to reveal all 8 squares around an empty s
 def leftClick(row,col): #clicks square to reveal
     global gameOver
     global playerField
+    global loadGame
 
     try:
         print('value', playerField[row][col])
@@ -278,6 +280,9 @@ def leftClick(row,col): #clicks square to reveal
     if minefield[row][col] <=  -1: #stepped on a mine
         gameOver = True
         print('mine!')
+        gameOver = True
+        loadGame = False
+
     else:
         if minefield[row][col] > 0: #clicked on a square that is adjacent
             playerField[row][col] = 1
@@ -322,6 +327,12 @@ def getClickedCords(clickPos):
 
     return (row,col)
 
+def revealGrid():
+    for r,row in enumerate(playerField):
+        for c,col in enumerate(row):
+            playerField[r][c] = 1
+            drawField()
+    return
 
 #main game loop 
 clock = pygame.time.Clock()
@@ -348,21 +359,28 @@ while run:
                 print(time_in_menu)
                 pygame.time.delay(30)
             
-
-        if loadGame == True: #commands for when game has been started
+        if loadGame: #commands for when game has been started
             drawField()
             drawTopPanel()
-            
-        pass #code for when game starts
+
+        if gameOver and not displayEndGame:
+            drawTopPanel()
+            revealGrid()
+        
+        if displayEndGame:
+            drawTopPanel()  
+        pass 
 
     
     for event in pygame.event.get():
         clock.tick(refreshRate)
         mouse = pygame.mouse.get_pressed()
-        if event.type == pygame.USEREVENT:
+
+        if event.type == pygame.USEREVENT and not gameOver:
             time += 1
         if event.type == pygame.QUIT:
             run = False 
+
         if loadGame == True and mouse[0]: #detect left click 
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
