@@ -355,10 +355,11 @@ while run:
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
+            pygame.time.delay(75)
         if exitButton.draw() == True:
             run = False
     else:
-        if loadDifficultySelect == False: #
+        if loadDifficultySelect == False: 
             if beginnerButton.draw() == True:
                 difficulty = 'advanced'
                 loadDifficultySelect = True
