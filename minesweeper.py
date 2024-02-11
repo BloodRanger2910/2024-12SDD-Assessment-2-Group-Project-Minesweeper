@@ -277,7 +277,7 @@ def leftClick(row,col): #clicks square to reveal
     except:
         return
     
-    if row < 0 or col < 0:
+    if (row < 0 or col < 0) or playerField[row][col] == 2:
         return
     
     while not firstClickDone and minefield[row][col] <=  -1:
