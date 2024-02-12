@@ -1,10 +1,11 @@
 import pygame
 import random
+import math
 
 pygame.init()
-menuHeight = 500
+menuHeight = 432
 menuWidth = 800
-refreshRate = 120
+refreshRate = 60
 
 width = 0
 height = 0
@@ -27,6 +28,21 @@ clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
 darkgreen_tile = pygame.image.load('images/darkgreen_tile.png').convert_alpha()
 lightgreen_tile = pygame.image.load('images/lightgreen_tile.png').convert_alpha()
+
+scroll = 0
+
+bg_images = []
+for i in range(1,6):
+    bg_image = pygame.image.load(f'images/plx-{i}.png').convert_alpha()
+    bg_images.append(bg_image)
+backgroundWidth = bg_images[0].get_width()
+
+tiles = math.ceil(menuWidth/backgroundWidth) + 1
+
+def drawBackground():
+    for i in range(tiles):
+        for layer in bg_images:
+            screen.blit(layer, (i*backgroundWidth + scroll,0))
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -355,6 +371,10 @@ while run:
     screen.fill((202,228,241))
 
     if startGame == False: #hides start button once start is clicked
+        drawBackground()
+        scroll -= 1
+        if abs(scroll) > backgroundWidth:
+            scroll = 0
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
