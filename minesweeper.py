@@ -28,6 +28,8 @@ clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
 darkgreen_tile = pygame.image.load('images/darkgreen_tile.png').convert_alpha()
 lightgreen_tile = pygame.image.load('images/lightgreen_tile.png').convert_alpha()
+floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
+floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
 
 scroll = 0
 
@@ -39,7 +41,7 @@ backgroundWidth = bg_images[0].get_width()
 
 tiles = math.ceil(menuWidth/backgroundWidth) + 1
 
-def drawBackground():
+def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
         for layer in bg_images:
             screen.blit(layer, (i*backgroundWidth + scroll,0))
@@ -159,13 +161,25 @@ def drawField(): #render the board
 
     for y, row in enumerate(playerField): #y is the number of squares deep (y-direction) the square is at
         for x, col in enumerate(row):  #x is the number of squares across (x-direction) the square is at
-            if playerField[y][x] == 0  or playerField[y][x] == 2:
-                y_cord = y*30
-                x_cord = x*30
+            y_cord = y*30
+            x_cord = x*30
+            if y%2 == 0:
+                if x%2 == 0:
+                    floorTile  = square(x_cord, y_cord+100,floortile_dark)
+                else:
+                    floorTile = square(x_cord, y_cord+100,floortile_light)
+            else:
+                if x%2 != 0:
+                    floorTile = square(x_cord, y_cord+100,floortile_dark)
+                else:
+                    floorTile = square(x_cord, y_cord+100,floortile_light)
+            floorTile.draw()
+
+            if playerField[y][x] == 0  or playerField[y][x] == 2: #check if not revealed or flagged
                 if y%2 == 0:
                     if x%2 == 0:
                         box = square(x_cord, y_cord+100,darkgreen_tile)
-                        box.draw()
+                        
                     else:
                         box = square(x_cord, y_cord+100,lightgreen_tile)
                 else:
@@ -175,14 +189,14 @@ def drawField(): #render the board
                         box = square(x_cord, y_cord+100,lightgreen_tile)
                 box.draw()
 
-            if minefield[y][x] == -1:
+            if minefield[y][x] == -1: #if square is mined
                 y_cord = y*30
                 x_cord = x*30
                 mine = square(x_cord, y_cord+100,mine_img)
                 mine.draw()
 
             
-            if playerField[y][x] == 2:
+            if playerField[y][x] == 2: #if square is flagged
                 y_cord = y*30
                 x_cord = x*30
 
