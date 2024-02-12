@@ -292,11 +292,14 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
 
     else:
-        if minefield[row][col] > 0: #clicked on a square that is adjacent
+        if minefield[row][col] > 0: #clicked on a square that is adjacent to at least one mine
             playerField[row][col] = 1
+            print('revealed',row,col)
 
         elif minefield[row][col] == 0: #clicked on empty square
             revealAllAdjacent(row,col)
+            print('revealed',row,col)
+            
 
 def rightClick(row,col):
     global playerField
@@ -311,9 +314,9 @@ def rightClick(row,col):
     if row < 0 or col < 0:
         return
     
-    if playerField[row][col] == 1:
+    if playerField[row][col] == 1: #flagged on an already revealed square
         return
-    if playerField[row][col] == 2:
+    if playerField[row][col] == 2: #remove already placed flag
         playerField[row][col] = 0
         flagsPlaced -= 1
         return
@@ -390,19 +393,17 @@ while run:
         if event.type == pygame.QUIT:
             run = False 
 
-        if loadGame == True and mouse[0]: #detect left click 
+        if loadGame == True and mouse[0]: #detect left click on grid
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
             if row > rows or cols > cols:
                 continue
             leftClick(row,col)
-            print('revealed',row,col)
 
         if loadGame == True and mouse[2]: #detect right click and place flag
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
             rightClick(row,col)
-            print('flagged',row,col)
             pygame.time.delay(30)
 
     pygame.display.update()
