@@ -31,13 +31,20 @@ floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha(
 
 scroll = 0
 
-bg_images = []
+bg_images = [] #loading background image layers
 for i in range(1,6):
     bg_image = pygame.image.load(f'images/plx-{i}.png').convert_alpha()
     bg_images.append(bg_image)
 backgroundWidth = bg_images[0].get_width()
 
 tiles = math.ceil(menuWidth/backgroundWidth) + 1
+
+numbers = {} #loading numbers 
+for i in range(1,9):
+    numberPic = pygame.image.load(f'images/Picture{i}.png').convert_alpha()
+    numbers[i] = numberPic
+
+
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
@@ -160,8 +167,9 @@ def drawField(): #render the board
     for y, row in enumerate(playerField): #y is the number of squares deep (y-direction) the square is at
         for x, col in enumerate(row):  #x is the number of squares across (x-direction) the square is at
             y_cord = y*30
-            x_cord = x*30
-            if y%2 == 0:
+            x_cord = x*30 #determine the position of the square
+
+            if y%2 == 0: #drawing the floor tiles
                 if x%2 == 0:
                     floorTile  = square(x_cord, y_cord+100,floortile_dark)
                 else:
@@ -173,8 +181,13 @@ def drawField(): #render the board
                     floorTile = square(x_cord, y_cord+100,floortile_light)
             floorTile.draw()
 
+            #drawing numbers ontop of floor tiles
+            if minefield[y][x] > 0:
+                num = square(x_cord, y_cord+100,numbers[minefield[y][x]])
+                num.draw()
+
             if playerField[y][x] == 0  or playerField[y][x] == 2: #check if not revealed or flagged
-                if y%2 == 0:
+                if y%2 == 0: #drawing the green tiles
                     if x%2 == 0:
                         box = square(x_cord, y_cord+100,darkgreen_tile)
                         
@@ -187,7 +200,7 @@ def drawField(): #render the board
                         box = square(x_cord, y_cord+100,lightgreen_tile)
                 box.draw()
 
-            if minefield[y][x] == -1: #if square is mined
+            if minefield[y][x] == -1: #if square is mined (move this to below green tiles later)
                 y_cord = y*30
                 x_cord = x*30
                 mine = square(x_cord, y_cord+100,mine_img)
