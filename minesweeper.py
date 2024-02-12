@@ -369,12 +369,12 @@ pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 while run:
 
     screen.fill((202,228,241))
+    scroll -= 1
+    if abs(scroll) > backgroundWidth:
+        scroll = 0
 
     if startGame == False: #hides start button once start is clicked
         drawBackground()
-        scroll -= 1
-        if abs(scroll) > backgroundWidth:
-            scroll = 0
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
@@ -383,6 +383,7 @@ while run:
             run = False
     else:
         if loadDifficultySelect == False: 
+            drawBackground()
             if beginnerButton.draw() == True:
                 difficulty = 'advanced'
                 loadDifficultySelect = True
