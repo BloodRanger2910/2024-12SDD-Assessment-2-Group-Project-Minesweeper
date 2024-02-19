@@ -167,9 +167,6 @@ def setupGame(difficulty):
 
     time_in_menu = time
     time = 0
-    
-    load_data()
-
 
 def drawField(): #render the board
     global minefield
