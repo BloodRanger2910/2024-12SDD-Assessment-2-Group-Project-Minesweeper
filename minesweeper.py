@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from os import path
 
 pygame.init()
 menuHeight = 432
@@ -12,6 +13,8 @@ height = 0
 
 time = 0
 time_in_menu = 0
+
+HS_FILE = 'highscore.txt'
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
 pygame.display.set_caption('Minesweeper')
@@ -120,7 +123,13 @@ startButton = button(310, 250, button_img, 1.5)
 exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 
-
+def load_data(self):
+    self.dir = path.dirname(__file__)
+    with open(path.join(self.dir, HS_FILE), 'w') as f:
+        try:
+            highscore = int(f.read())
+        except:
+            highscore = 0 
 #how big is the image in pixels
 def setupGame(difficulty):  
 
@@ -158,6 +167,8 @@ def setupGame(difficulty):
 
     time_in_menu = time
     time = 0
+    
+    load_data()
 
 
 def drawField(): #render the board
@@ -214,8 +225,6 @@ def drawField(): #render the board
                 flag = square(x_cord, y_cord+100,flag_custom_img)
                 flag.draw()
 
-            
-
     pass
     #perhaps make it so that when player clicks, the box dissapears and reveals number below it?
 
@@ -241,6 +250,7 @@ def drawTopPanel():
     flagRect = flagImg.get_rect()
     flagRect.center = (150,50)
     screen.blit(flagImg, flagRect)
+
 
 
 
@@ -385,6 +395,8 @@ def revealGrid():
             playerField[r][c] = 1
             drawField()
     return
+
+
 
 #main game loop 
 clock = pygame.time.Clock()
