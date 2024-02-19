@@ -27,8 +27,8 @@ beginner_img = pygame.image.load('images/button_resume.png').convert_alpha()
 mine_img = pygame.image.load('images/landmine.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
-darkgreen_tile = pygame.image.load('images/darkgreen_tile.png').convert_alpha()
-lightgreen_tile = pygame.image.load('images/lightgreen_tile.png').convert_alpha()
+darkgreen_tile = pygame.image.load('images/GRASS+1.png').convert_alpha()
+lightgreen_tile = pygame.image.load('images/GRASS+2.png').convert_alpha()
 floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
 
@@ -463,6 +463,10 @@ while run:
             row,col = getClickedCords(mousePos)
             rightClick(row,col)
             pygame.time.delay(30)
+
+        if gameOver:
+            #code gameover screen into here (perhaps make a function that draws the screen and one to reset)
+            pass
 
     pygame.display.update()
 
