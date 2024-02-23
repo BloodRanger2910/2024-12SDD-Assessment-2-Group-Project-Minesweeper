@@ -17,7 +17,7 @@ height = 0
 time = 0
 time_in_menu = 0
 
-HS_FILE = 'highscore.txt'
+highscoredata = []
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
 pygame.display.set_caption('Minesweeper')
@@ -135,19 +135,10 @@ startButton = button(310, 250, button_img, 1.5)
 exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 
-def load_data(self):
-    self.dir = path.dirname(__file__)
-    with open(path.join(self.dir, HS_FILE), 'w') as f:
-        try:
-            highscore = int(f.read())
-        except:
-            highscore = 0 
-#how big is the image in pixels
-            
+
 
 def recordHighScore():
     global time
-    
     #compare if time is in top 5
     #if time is in top 5 -> insertion sort time into list -> remove after 4th index -> update persistence
 
@@ -187,8 +178,6 @@ def setupGame(difficulty):
 
     time_in_menu = time
     time = 0
-    
-    load_data()
 
 
 def drawField(): #render the board
