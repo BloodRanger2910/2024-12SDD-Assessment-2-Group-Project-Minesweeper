@@ -131,6 +131,14 @@ def load_data(self):
         except:
             highscore = 0 
 #how big is the image in pixels
+            
+
+def recordHighScore():
+    global time
+    
+    #compare if time is in top 5
+    #if time is in top 5 -> insertion sort time into list -> remove after 4th index -> update persistence
+
 def setupGame(difficulty):  
 
     global rows
@@ -433,6 +441,8 @@ while run:
         if gameOver and not displayEndGame:
             drawTopPanel()
             revealGrid()
+            #code to take the time and write to file
+            
         
         if displayEndGame:
             drawTopPanel()  
