@@ -3,6 +3,9 @@ import random
 import math
 from os import path
 
+mixer=pygame.mixer
+pygame.mixer.pre_init(44100, -16, 2, 512)
+mixer.init()
 pygame.init()
 menuHeight = 432
 menuWidth = 800
@@ -19,6 +22,15 @@ HS_FILE = 'highscore.txt'
 screen = pygame.display.set_mode((menuWidth,menuHeight))
 pygame.display.set_caption('Minesweeper')
 rows,cols,mines = 0,0,0
+
+#load sound assets
+trapsong = pygame.mixer.Sound('sounds/videogame beat 1 for software minesweeper.mp3')
+trapsong.set_volume(0.8)
+trapsong.play(loops=-1)
+grass_sfx = pygame.mixer.Sound('sounds/grass sfx.mp3')
+grass_sfx.set_volume(3)
+explosion_sfx = pygame.mixer.Sound('sounds/explosion sfx.mp3')
+
 
 #loading image assets
 button_img = pygame.image.load('images/start_btn.png').convert_alpha()
@@ -44,7 +56,7 @@ tiles = math.ceil(menuWidth/backgroundWidth) + 1
 
 numbers = {} #loading numbers 
 for i in range(1,9):
-    numberPic = pygame.image.load(f'images/Picture{i}.png').convert_alpha()
+    numberPic = pygame.image.load(f'images/number {i}.png').convert_alpha()
     numbers[i] = numberPic
 
 
@@ -168,7 +180,7 @@ def setupGame(difficulty):
     time_in_menu = time
     time = 0
     
-    load_data()
+    
 
 
 def drawField(): #render the board
@@ -341,8 +353,10 @@ def leftClick(row,col): #clicks square to reveal
         print('mine!')
         gameOver = True
         loadGame = False
+        explosion_sfx.play()
 
     else:
+        grass_sfx.play()
         if minefield[row][col] > 0: #clicked on a square that is adjacent to at least one mine
             playerField[row][col] = 1
             print('revealed',row,col)
