@@ -360,10 +360,12 @@ def leftClick(row,col): #clicks square to reveal
         if minefield[row][col] > 0: #clicked on a square that is adjacent to at least one mine
             playerField[row][col] = 1
             print('revealed',row,col)
+            
 
         elif minefield[row][col] == 0: #clicked on empty square
             revealAllAdjacent(row,col)
             print('revealed',row,col)
+            
             
 
 def rightClick(row,col):
