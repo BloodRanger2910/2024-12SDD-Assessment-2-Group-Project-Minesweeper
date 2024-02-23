@@ -3,6 +3,9 @@ import random
 import math
 from os import path
 
+mixer=pygame.mixer
+pygame.mixer.pre_init(44100, -16, 2, 512)
+mixer.init()
 pygame.init()
 menuHeight = 432
 menuWidth = 800
@@ -14,11 +17,20 @@ height = 0
 time = 0
 time_in_menu = 0
 
-HS_FILE = 'highscore.txt'
+highscoredata = []
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
 pygame.display.set_caption('Minesweeper')
 rows,cols,mines = 0,0,0
+
+#load sound assets
+trapsong = pygame.mixer.Sound('sounds/videogame beat 1 for software minesweeper.mp3')
+trapsong.set_volume(0.8)
+trapsong.play(loops=-1)
+grass_sfx = pygame.mixer.Sound('sounds/grass sfx.mp3')
+grass_sfx.set_volume(3)
+explosion_sfx = pygame.mixer.Sound('sounds/explosion sfx.mp3')
+
 
 #loading image assets
 button_img = pygame.image.load('images/start_btn.png').convert_alpha()
@@ -44,7 +56,7 @@ tiles = math.ceil(menuWidth/backgroundWidth) + 1
 
 numbers = {} #loading numbers 
 for i in range(1,9):
-    numberPic = pygame.image.load(f'images/Picture{i}.png').convert_alpha()
+    numberPic = pygame.image.load(f'images/number {i}.png').convert_alpha()
     numbers[i] = numberPic
 
 
@@ -123,19 +135,10 @@ startButton = button(310, 250, button_img, 1.5)
 exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 
-def load_data(self):
-    self.dir = path.dirname(__file__)
-    with open(path.join(self.dir, HS_FILE), 'w') as f:
-        try:
-            highscore = int(f.read())
-        except:
-            highscore = 0 
-#how big is the image in pixels
-            
+
 
 def recordHighScore():
     global time
-    
     #compare if time is in top 5
     #if time is in top 5 -> insertion sort time into list -> remove after 4th index -> update persistence
 
@@ -175,6 +178,7 @@ def setupGame(difficulty):
 
     time_in_menu = time
     time = 0
+
 
 def drawField(): #render the board
     global minefield
@@ -346,15 +350,19 @@ def leftClick(row,col): #clicks square to reveal
         print('mine!')
         gameOver = True
         loadGame = False
+        explosion_sfx.play()
 
     else:
+        grass_sfx.play()
         if minefield[row][col] > 0: #clicked on a square that is adjacent to at least one mine
             playerField[row][col] = 1
             print('revealed',row,col)
+            
 
         elif minefield[row][col] == 0: #clicked on empty square
             revealAllAdjacent(row,col)
             print('revealed',row,col)
+            
             
 
 def rightClick(row,col):
