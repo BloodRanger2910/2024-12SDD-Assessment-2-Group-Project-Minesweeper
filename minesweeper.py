@@ -30,6 +30,7 @@ trapsong.play(loops=-1)
 grass_sfx = pygame.mixer.Sound('sounds/grass sfx.mp3')
 grass_sfx.set_volume(3)
 explosion_sfx = pygame.mixer.Sound('sounds/explosion sfx.mp3')
+flag_sfx = pygame.mixer.Sound('sounds/flag sfx.mp3')
 
 
 #loading image assets
@@ -384,7 +385,7 @@ def rightClick(row,col):
         playerField[row][col] = 0
         flagsPlaced -= 1
         return
-    
+    flag_sfx.play()
     playerField[row][col] = 2
     flagsPlaced += 1
 
