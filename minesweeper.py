@@ -341,7 +341,7 @@ def leftClick(row,col): #clicks square to reveal
     if (row < 0 or col < 0) or playerField[row][col] == 2:
         return
     
-    while not firstClickDone and minefield[row][col] <=  -1:
+    while not firstClickDone and minefield[row][col] !=  0: #prevents mine from being stepped on first click
         minefield = generateGrid(rows, cols, mines)
 
     firstClickDone = True
