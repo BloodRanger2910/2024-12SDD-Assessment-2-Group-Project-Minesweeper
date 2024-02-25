@@ -389,7 +389,10 @@ def leftClick(row,col): #clicks square to reveal
         save_highscore(time)
 
     else:
-        grass_sfx.play()
+        if playerField[row][col] == 0:
+            grass_sfx.play()
+
+
         if minefield[row][col] > 0: #clicked on a square that is adjacent to at least one mine
             playerField[row][col] = 1
             print('revealed',row,col)
@@ -398,8 +401,7 @@ def leftClick(row,col): #clicks square to reveal
         elif minefield[row][col] == 0: #clicked on empty square
             revealAllAdjacent(row,col)
             print('revealed',row,col)
-            
-            
+
 
 def rightClick(row,col):
     global playerField
@@ -484,6 +486,7 @@ while run:
         if gameOver and not displayEndGame:
             drawTopPanel()
             drawField()
+            
             #code to take the time and write to file
             
         
