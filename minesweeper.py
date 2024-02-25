@@ -352,6 +352,7 @@ def leftClick(row,col): #clicks square to reveal
         gameOver = True
         loadGame = False
         explosion_sfx.play()
+        revealGrid()
 
     else:
         grass_sfx.play()
@@ -407,7 +408,6 @@ def revealGrid():
     for r,row in enumerate(playerField):
         for c,col in enumerate(row):
             playerField[r][c] = 1
-            drawField()
     return
 
 
@@ -449,7 +449,7 @@ while run:
 
         if gameOver and not displayEndGame:
             drawTopPanel()
-            revealGrid()
+            drawField()
             #code to take the time and write to file
             
         
