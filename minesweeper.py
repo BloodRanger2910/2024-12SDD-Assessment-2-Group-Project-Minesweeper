@@ -44,6 +44,7 @@ darkgreen_tile = pygame.image.load('images/GRASS+1.png').convert_alpha()
 lightgreen_tile = pygame.image.load('images/GRASS+2.png').convert_alpha()
 floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
+soundbutton_img = pygame.image.load('images/soundbutton.png').convert_alpha()
 
 scroll = 0
 
@@ -273,26 +274,33 @@ def drawField(): #render the board
 
 def drawTopPanel():
     global clock_img
+    global width
+    global height
     
     timeText = font.render(str(time), True, (0,0,0))
     textRect = timeText.get_rect()
-    textRect.center = (100, 50)
+    textRect.center = (width/10 + 40, 50)
     screen.blit(timeText, textRect)
 
     clock_img2 = pygame.transform.scale(clock_img, (int(clock_img.get_width()*0.20), int(clock_img.get_height()*0.20)))
     clockRect = clock_img2.get_rect()
-    clockRect.center = (50,50)
+    clockRect.center = (width/10 ,50)
     screen.blit(clock_img2, clockRect)
 
     flagsText = font.render(str(mines-flagsPlaced), True, (0,0,0))
     flagsTextRect = flagsText.get_rect()
-    flagsTextRect.center = (200,50)
+    flagsTextRect.center = (width/10 + 100 ,50)
     screen.blit(flagsText,flagsTextRect)
 
     flagImg = pygame.transform.scale(flag_custom_img, (int(flag_custom_img.get_width()), int(flag_custom_img.get_height())))
     flagRect = flagImg.get_rect()
-    flagRect.center = (150,50)
+    flagRect.center = (width/10 + 70,50)
     screen.blit(flagImg, flagRect)
+
+    soundButton = button((width/10)*9-30, 30, soundbutton_img, 0.05)
+
+    if soundButton.draw():
+        pass
 
 
 
@@ -472,7 +480,7 @@ while run:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'advanced'
+                difficulty = 'master'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
