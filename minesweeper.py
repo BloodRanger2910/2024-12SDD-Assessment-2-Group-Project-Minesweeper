@@ -1,7 +1,7 @@
 import pygame
 import random
 import math
-from os import path
+import os
 
 mixer=pygame.mixer
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -79,6 +79,39 @@ flagsPlaced = 0
 displayEndGame = False
 firstClickDone = False
 
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] < key:  # Adjusted comparison for descending order
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+        
+def save_highscore(time):
+    # Check if the file exists
+    if not os.path.exists("highscores.txt"):
+        with open("highscores.txt", "w") as file:
+            file.write(f"{time}\n")
+        return
+
+    # Read existing high scores
+    with open("highscores.txt", "r") as file:
+        highscores = [float(score.strip()) for score in file.readlines()]
+
+    # Add the new score
+    highscores.append(time)
+
+    # Sort the high scores
+    insertion_sort(highscores)
+
+    # Keep only the top 5 scores
+    highscores = highscores[:5]
+
+    # Write the updated high scores to the file
+    with open("highscores.txt", "w") as file:
+        for score in highscores:
+            file.write(f"{score}\n")
 
 class button(): #general button class
     def __init__(self, x, y, image, scale):
@@ -353,6 +386,7 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
         explosion_sfx.play()
         revealGrid()
+        save_highscore(time)
 
     else:
         grass_sfx.play()
