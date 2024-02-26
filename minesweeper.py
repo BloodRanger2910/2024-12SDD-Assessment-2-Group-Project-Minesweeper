@@ -89,15 +89,15 @@ def insertion_sort(arr):
             j -= 1
         arr[j + 1] = key
         
-def save_highscore(time, highscore_file):
+def save_highscore(time):
     # Check if the file exists
-    if not os.path.exists(highscore_file):
-        with open(highscore_file, "w") as file:
+    if not os.path.exists("highscores.txt"):
+        with open("highscores.txt", "w") as file:
             file.write(f"{time}\n")
         return
 
     # Read existing high scores
-    with open(highscore_file, "r") as file:
+    with open("highscores.txt", "r") as file:
         highscores = [float(score.strip()) for score in file.readlines()]
 
     # Add the new score
@@ -110,7 +110,7 @@ def save_highscore(time, highscore_file):
     highscores = highscores[:5]
 
     # Write the updated high scores to the file
-    with open(highscore_file, "w") as file:
+    with open("highscores.txt", "w") as file:
         for score in highscores:
             file.write(f"{score}\n")
 
@@ -169,6 +169,11 @@ class square(): #dimensions of a square will be 30x30
 startButton = button(310, 250, button_img, 1.5)
 exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
+
+highScoreText = font.render("High Scores", True, (0,0,0))
+highScoreRect = highScoreText.get_rect()
+highScoreRect.center = (width/10 + 40, 50)
+
 
 
 
@@ -480,7 +485,6 @@ def revealGrid():
     return
 
 
-
 #main game loop 
 clock = pygame.time.Clock()
 run = True
@@ -513,6 +517,8 @@ while run:
                 flag_sfx.set_volume(1)
                 pygame.time.delay(120)
 
+        
+
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
@@ -523,7 +529,7 @@ while run:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'intermediate'
+                difficulty = 'beginner'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
@@ -538,8 +544,8 @@ while run:
             drawTopPanel()
             drawField()
             
-            #code to take the time and write to file
-            
+            #code to take the time and write to file         
+        
         if displayEndGame:
             drawTopPanel()  
         pass 
