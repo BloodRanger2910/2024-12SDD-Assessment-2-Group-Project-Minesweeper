@@ -89,15 +89,15 @@ def insertion_sort(arr):
             j -= 1
         arr[j + 1] = key
         
-def save_highscore(time):
+def save_highscore(time, highscore_file):
     # Check if the file exists
-    if not os.path.exists("highscores.txt"):
-        with open("highscores.txt", "w") as file:
+    if not os.path.exists(highscore_file):
+        with open(highscore_file, "w") as file:
             file.write(f"{time}\n")
         return
 
     # Read existing high scores
-    with open("highscores.txt", "r") as file:
+    with open(highscore_file, "r") as file:
         highscores = [float(score.strip()) for score in file.readlines()]
 
     # Add the new score
@@ -110,7 +110,7 @@ def save_highscore(time):
     highscores = highscores[:5]
 
     # Write the updated high scores to the file
-    with open("highscores.txt", "w") as file:
+    with open(highscore_file, "w") as file:
         for score in highscores:
             file.write(f"{score}\n")
 
@@ -409,7 +409,17 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
         explosion_sfx.play()
         revealGrid()
-        save_highscore(time)
+        if difficulty == 'beginner':
+            save_highscore(time, "highscore_beginner.txt")
+
+        elif difficulty == 'intermediate':
+            save_highscore(time, "highscore_intermediate.txt")
+
+        elif difficulty == 'advanced':
+            save_highscore(time, "highscore_advanced.txt")
+
+        elif difficulty == 'master':
+            save_highscore(time, "highscore_master.txt")
 
     else:
         if playerField[row][col] == 0:
@@ -512,7 +522,6 @@ while run:
             
             #code to take the time and write to file
             
-        
         if displayEndGame:
             drawTopPanel()  
         pass 
