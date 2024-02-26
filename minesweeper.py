@@ -84,7 +84,7 @@ def insertion_sort(arr):
     for i in range(1, len(arr)):
         key = arr[i]
         j = i - 1
-        while j >= 0 and arr[j] < key:  # Adjusted comparison for descending order
+        while j >= 0 and arr[j] > key:  # Adjusted comparison for reverse sorting order
             arr[j + 1] = arr[j]
             j -= 1
         arr[j + 1] = key
@@ -410,16 +410,16 @@ def leftClick(row,col): #clicks square to reveal
         explosion_sfx.play()
         revealGrid()
         if difficulty == 'beginner':
-            save_highscore(time, "highscore_beginner.txt")
+            save_highscore(time, "Highscores/highscore_beginner.txt")
 
         elif difficulty == 'intermediate':
-            save_highscore(time, "highscore_intermediate.txt")
+            save_highscore(time, "Highscores/highscore_intermediate.txt")
 
         elif difficulty == 'advanced':
-            save_highscore(time, "highscore_advanced.txt")
+            save_highscore(time, "Highscores/highscore_advanced.txt")
 
         elif difficulty == 'master':
-            save_highscore(time, "highscore_master.txt")
+            save_highscore(time, "Highscores/highscore_master.txt")
 
     else:
         if playerField[row][col] == 0:
