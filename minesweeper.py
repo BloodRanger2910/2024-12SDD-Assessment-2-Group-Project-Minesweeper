@@ -485,6 +485,24 @@ while run:
 
     if startGame == False: #hides start button once start is clicked
         drawBackground()
+        soundButton = button(750, 20, soundbutton_img, 0.1)
+
+        if soundButton.draw():
+            if mute == False:
+                mute = True
+                trapsong.set_volume(0)
+                grass_sfx.set_volume(0)
+                explosion_sfx.set_volume(0)
+                flag_sfx.set_volume(0)
+                pygame.time.delay(120)
+            else:
+                mute = False 
+                trapsong.set_volume(0.8)
+                grass_sfx.set_volume(3)
+                explosion_sfx.set_volume(1)
+                flag_sfx.set_volume(1)
+                pygame.time.delay(120)
+
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
