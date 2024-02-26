@@ -484,6 +484,17 @@ def revealGrid():
             playerField[r][c] = 1
     return
 
+def checkIfWon():
+    count = 0
+    for row in playerField:
+        for square in row:
+            if col == 1:
+                count += 1
+    if count == (rows*cols - mines):
+        return True
+    else:
+        return False
+    
 
 #main game loop 
 clock = pygame.time.Clock()
