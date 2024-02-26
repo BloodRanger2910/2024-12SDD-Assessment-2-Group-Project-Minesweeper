@@ -44,7 +44,7 @@ darkgreen_tile = pygame.image.load('images/GRASS+1.png').convert_alpha()
 lightgreen_tile = pygame.image.load('images/GRASS+2.png').convert_alpha()
 floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
-soundbutton_img = pygame.image.load('images/soundbutton.png').convert_alpha()
+soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
 
 scroll = 0
 
@@ -129,7 +129,7 @@ class button(): #general button class
         self.img_scaled = pygame.transform.scale(image, (int(width * 1.1 * scale), int(height * 1.1 * scale)))
 
         self.scaledRect = self.img_scaled.get_rect()
-        self.scaledRect.topleft = (x-(0.1*width)/2, y - (0.1*height)/2)
+        self.scaledRect.topleft = (x-(0.1*width*scale)/2, y - (0.1*height*scale)/2)
 
 
     def draw(self):
@@ -298,7 +298,7 @@ def drawTopPanel():
     flagRect.center = (width/10 + 70,50)
     screen.blit(flagImg, flagRect)
 
-    soundButton = button((width/10)*9-30, 30, soundbutton_img, 0.05)
+    soundButton = button((width/10)*9-30, 30, soundbutton_img, 0.1)
 
     if soundButton.draw():
         pass
@@ -481,7 +481,7 @@ while run:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'master'
+                difficulty = 'intermediate'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
