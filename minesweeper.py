@@ -10,7 +10,7 @@ pygame.init()
 menuHeight = 432
 menuWidth = 800
 refreshRate = 60
-
+mute = False
 width = 0
 height = 0
 
@@ -277,6 +277,7 @@ def drawTopPanel():
     global clock_img
     global width
     global height
+    global mute
     
     timeText = font.render(str(time), True, (0,0,0))
     textRect = timeText.get_rect()
@@ -301,7 +302,20 @@ def drawTopPanel():
     soundButton = button((width/10)*9-30, 30, soundbutton_img, 0.1)
 
     if soundButton.draw():
-        pass
+        if mute == False:
+            mute = True
+            trapsong.set_volume(0)
+            grass_sfx.set_volume(0)
+            explosion_sfx.set_volume(0)
+            flag_sfx.set_volume(0)
+            pygame.time.delay(120)
+        else:
+            mute = False 
+            trapsong.set_volume(0.8)
+            grass_sfx.set_volume(3)
+            explosion_sfx.set_volume(1)
+            flag_sfx.set_volume(1)
+            pygame.time.delay(120)
 
 
 
