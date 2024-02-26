@@ -241,6 +241,12 @@ def drawField(): #render the board
                 num = square(x_cord, y_cord+100,numbers[minefield[y][x]])
                 num.draw()
 
+            if minefield[y][x] == -1: #if square is mined (move this to below green tiles later)
+                y_cord = y*30
+                x_cord = x*30
+                mine = square(x_cord, y_cord+100,mine_img)
+                mine.draw()
+
             if playerField[y][x] == 0  or playerField[y][x] == 2: #check if not revealed or flagged
                 if y%2 == 0: #drawing the green tiles
                     if x%2 == 0:
@@ -255,11 +261,6 @@ def drawField(): #render the board
                         box = square(x_cord, y_cord+100,lightgreen_tile)
                 box.draw()
 
-            if minefield[y][x] == -1: #if square is mined (move this to below green tiles later)
-                y_cord = y*30
-                x_cord = x*30
-                mine = square(x_cord, y_cord+100,mine_img)
-                mine.draw()
 
             
             if playerField[y][x] == 2: #if square is flagged
