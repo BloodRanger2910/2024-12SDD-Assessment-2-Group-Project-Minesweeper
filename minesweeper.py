@@ -91,6 +91,7 @@ def insertion_sort(arr):
         
 def save_highscore(time, highscore_file):
     # Check if the file exists
+    highscores = []
     if not os.path.exists(highscore_file):
         with open(highscore_file, "w") as file:
             file.write(f"{time}\n")
@@ -98,7 +99,10 @@ def save_highscore(time, highscore_file):
 
     # Read existing high scores
     with open(highscore_file, "r") as file:
-        highscores = [float(score.strip()) for score in file.readlines()]
+        for score in file.readlines():
+            if score.strip() != '':
+                highscores.append(float(score.strip()))
+
 
     # Add the new score
     highscores.append(time)
