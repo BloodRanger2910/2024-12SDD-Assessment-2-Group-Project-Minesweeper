@@ -412,7 +412,6 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
         explosion_sfx.play()
         revealGrid()
-        save_highscore(time)
 
     else:
         if playerField[row][col] == 0:
@@ -496,6 +495,8 @@ exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 highScoreButton = button(150,250, highScore_image,1)
 
+file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'master':'master', 'advanced':'advanced'}
+
 while run:
 
     screen.fill((202,228,241))
@@ -544,10 +545,12 @@ while run:
             checkWinCondition()
 
         if gameWon and not displayEndGame: #if player wins
-            pass	
+            save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}')	
+            displayEndGame = True
         
         if displayEndGame:
-            drawTopPanel()  
+            drawTopPanel() 
+            drawField() 
         pass 
 
     
@@ -555,7 +558,7 @@ while run:
         clock.tick(refreshRate)
         mouse = pygame.mouse.get_pressed()
 
-        if event.type == pygame.USEREVENT and not gameOver:
+        if event.type == pygame.USEREVENT and not gameOver and not gameWon:
             time += 1
         if event.type == pygame.QUIT:
             run = False 
