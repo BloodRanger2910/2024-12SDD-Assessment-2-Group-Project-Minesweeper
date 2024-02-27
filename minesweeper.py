@@ -13,8 +13,7 @@ refreshRate = 60
 mute = False
 width = 0
 height = 0
-gameWon = False
-display_highscore = False
+
 time = 0
 time_in_menu = 0
 
@@ -47,8 +46,6 @@ floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
 soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
 minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
-highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
-highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
 
 scroll = 0
 
@@ -69,9 +66,6 @@ def drawLogo(): #draws the minesweeper logo on the starting screen
     logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
     screen.blit(logoImage, (100,70))
     
-def displayHighScores():
-    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.3))
-    screen.blit(frameImage, (230,10))
 
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -85,6 +79,8 @@ loadGame = False #to setup game
 minefield = None #stores the minefield (-1 for mine), pre laced with mine counts
 playerField = None #the field that the player sees, 0 for unrevealed, 1 for revealed, 2 for flagged
 gameOver = False #triggers when player steps on a mine
+gameWon = False
+game_over = False
 font = pygame.font.Font('munro.ttf', 30) 
 textRect = None 
 flagsPlaced = 0
@@ -164,6 +160,25 @@ class button(): #general button class
 
         return action
     
+class TestWinButton:
+    def __init__(self, x, y, width, height, text):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.clicked = False
+
+
+    def draw(self):
+        pygame.draw.rect(screen, (0, 255, 0), self.rect)
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(self.text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+
+    def check_click(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                self.clicked = True
+
 class square(): #dimensions of a square will be 30x30
     def __init__(self, x, y, image):
         self.imageAsset = image
@@ -173,6 +188,14 @@ class square(): #dimensions of a square will be 30x30
 
     def draw(self):
         screen.blit(self.image, (self.rect.x,self.rect.y))
+
+
+
+startButton = button(310, 250, button_img, 1.5)
+exitButton = button(310, 330, exit_img, 1.5)
+beginnerButton = button(300, 200, beginner_img, 1)
+reveal_all_button = button(0, 0, button_img, 1)
+
 
 def recordHighScore():
     global time
@@ -345,6 +368,7 @@ def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a
 
     return neighbours
 
+
 def generateGrid(rows,cols,mines):
     field = [[0 for _ in range(cols)] for _ in range(rows)]
     mine_positions = set()
@@ -428,6 +452,15 @@ def leftClick(row,col): #clicks square to reveal
             print('revealed',row,col)
 
 
+def checkWinCondition():
+    global playerField, rows, cols, mines, gameWon, displayEndGame
+    revealed_count = sum(row.count(1) for row in playerField)
+    total_squares = rows * cols
+    if revealed_count == total_squares - mines:
+        gameWon = True
+        displayEndGame = True
+#checks if the amount of revealed squares are the same as the amount of non mine squares
+
 def rightClick(row,col):
     global playerField
     global flagsPlaced
@@ -471,29 +504,12 @@ def revealGrid():
             playerField[r][c] = 1
     return
 
-def checkWinCondition():
-    global gameWon 
-    global playerField, rows, cols, mines
-    revealed_count = 0
-
-    for row in playerField:
-        for square in row:
-            if square == 1:
-                revealed_count += 1
-
-    total_squares = rows * cols
-    if revealed_count == (total_squares - mines):
-        gameWon = True
+test_win_button = TestWinButton(50, 50, 200, 50, "Test Win")
 
 #main game loop 
 clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
-
-startButton = button(310, 250, button_img, 1.5)
-exitButton = button(310, 330, exit_img, 1.5)
-beginnerButton = button(300, 200, beginner_img, 1)
-highScoreButton = button(150,250, highScore_image,1)
 
 while run:
 
@@ -502,7 +518,7 @@ while run:
     if abs(scroll) > backgroundWidth:
         scroll = 0
 
-    if startGame == False: #hides start button once start is clicked, put everything on menu here
+    if startGame == False: #hides start button once start is clicked
         drawBackground()
         drawLogo()
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
@@ -511,19 +527,11 @@ while run:
             pygame.time.delay(75)
         if exitButton.draw() == True:
             run = False
-
-        if highScoreButton.draw() == True:
-            print('high scores')
-            display_highscore = True
-
-        if display_highscore:
-            displayHighScores()
-        
     else:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'beginner'
+                difficulty = 'intermediate'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
@@ -533,25 +541,16 @@ while run:
         if loadGame: #commands for when game has been started
             drawField()
             drawTopPanel()
-
-        if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
-            drawTopPanel()
-            drawField()
-            #code to take the time and write to file
-        
-        if not gameWon and loadGame: #constantly checking if all squares have been revealed
             checkWinCondition()
+            test_win_button.draw()
 
-        if gameWon and not displayEndGame: #if player wins
-            pass	
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if reveal_all_button.rect.collidepoint(event.pos):
+                # Set all squares to revealed
+                    for y in range(rows):
+                        for x in range(cols):
+                            playerField[y][x] = 1
 
-            
-        
-        if displayEndGame:
-            drawTopPanel()  
-        pass 
-
-    
     for event in pygame.event.get():
         clock.tick(refreshRate)
         mouse = pygame.mouse.get_pressed()
@@ -574,10 +573,56 @@ while run:
             rightClick(row,col)
             pygame.time.delay(30)
 
-        if gameOver:
-            #code gameover screen into here (perhaps make a function that draws the screen and one to reset)
-            pass
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        
+        test_win_button.check_click(event)
 
+    if test_win_button.clicked:
+        gameWon = True
+        displayEndGame = True
+
+    if displayEndGame:
+        if gameWon:
+            # Render the win screen
+                screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
+                win_font = pygame.font.Font(None, 100)
+                win_text = win_font.render("Congratulations!", True, (255, 255, 255))
+                win_rect = win_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
+                screen.blit(win_text, win_rect)
+                pygame.display.flip()  # Update the display
+
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            run = False  # Exit the game loop and quit the game
+                            break  # Exit the nested event loop as well
+                    if not run:
+                        break
+           
+    if gameOver and not game_over:
+        # Render the lose screen
+        screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
+        loss_font = pygame.font.Font(None, 100)
+        loss_text = loss_font.render("Game Over!", True, (255, 255, 255))
+        loss_rect = loss_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
+        screen.blit(loss_text, loss_rect)
+        pygame.display.flip()  # Update the display
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False  # Exit the game loop and quit the game
+                    break  # Exit the nested event loop as well
+            if not run:
+                break  # Exit the main event loop if run is False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if reveal_all_button.rect.collidepoint(event.pos):
+                # Implement the functionality to reveal all squares
+                revealAll()
+                revealAllClicked = True
     pygame.display.update()
 
 
@@ -585,3 +630,4 @@ while run:
 #function to check all 8 adjacent squares from clicked square
 #if any one of the 8 squares is empty, reveal all 8 sqaures around empty square
 #recursive repeat for each square that was just revealed
+    
