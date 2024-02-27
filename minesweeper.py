@@ -45,6 +45,7 @@ lightgreen_tile = pygame.image.load('images/GRASS+2.png').convert_alpha()
 floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
 soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
+minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
 
 scroll = 0
 
@@ -61,6 +62,9 @@ for i in range(1,9):
     numberPic = pygame.image.load(f'images/number {i}.png').convert_alpha()
     numbers[i] = numberPic
 
+def drawLogo(): #draws the minesweeper logo on the starting screen
+    screen.blit(minesweeper_text,(10,100))
+    print("nigger")
 
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -80,29 +84,26 @@ flagsPlaced = 0
 displayEndGame = False
 firstClickDone = False
 
+
 def insertion_sort(arr):
     for i in range(1, len(arr)):
         key = arr[i]
         j = i - 1
-        while j >= 0 and arr[j] < key:  # Adjusted comparison for reverse sorting order
+        while j >= 0 and arr[j] < key:  # Adjusted comparison for descending order
             arr[j + 1] = arr[j]
             j -= 1
         arr[j + 1] = key
         
-def save_highscore(time, highscore_file):
+def save_highscore(time):
     # Check if the file exists
-    highscores = []
-    if not os.path.exists(highscore_file):
-        with open(highscore_file, "w") as file:
+    if not os.path.exists("highscores.txt"):
+        with open("highscores.txt", "w") as file:
             file.write(f"{time}\n")
         return
 
     # Read existing high scores
-    with open(highscore_file, "r") as file:
-        for score in file.readlines():
-            if score.strip() != '':
-                highscores.append(float(score.strip()))
-
+    with open("highscores.txt", "r") as file:
+        highscores = [float(score.strip()) for score in file.readlines()]
 
     # Add the new score
     highscores.append(time)
@@ -114,7 +115,7 @@ def save_highscore(time, highscore_file):
     highscores = highscores[:5]
 
     # Write the updated high scores to the file
-    with open(highscore_file, "w") as file:
+    with open("highscores.txt", "w") as file:
         for score in highscores:
             file.write(f"{score}\n")
 
@@ -153,8 +154,6 @@ class button(): #general button class
 
         if pygame.mouse.get_pressed()[0] ==  0:
             self.clicked = False
-            
-
 
         return action
     
@@ -173,11 +172,6 @@ class square(): #dimensions of a square will be 30x30
 startButton = button(310, 250, button_img, 1.5)
 exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
-
-highScoreText = font.render("High Scores", True, (0,0,0))
-highScoreRect = highScoreText.get_rect()
-highScoreRect.center = (width/10 + 40, 50)
-
 
 
 
@@ -418,17 +412,7 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
         explosion_sfx.play()
         revealGrid()
-        if difficulty == 'beginner':
-            save_highscore(time, "Highscores/highscore_beginner.txt")
-
-        elif difficulty == 'intermediate':
-            save_highscore(time, "Highscores/highscore_intermediate.txt")
-
-        elif difficulty == 'advanced':
-            save_highscore(time, "Highscores/highscore_advanced.txt")
-
-        elif difficulty == 'master':
-            save_highscore(time, "Highscores/highscore_master.txt")
+        save_highscore(time)
 
     else:
         if playerField[row][col] == 0:
@@ -488,17 +472,7 @@ def revealGrid():
             playerField[r][c] = 1
     return
 
-def checkIfWon():
-    count = 0
-    for row in playerField:
-        for square in row:
-            if col == 1:
-                count += 1
-    if count == (rows*cols - mines):
-        return True
-    else:
-        return False
-    
+
 
 #main game loop 
 clock = pygame.time.Clock()
@@ -514,26 +488,7 @@ while run:
 
     if startGame == False: #hides start button once start is clicked
         drawBackground()
-        soundButton = button(750, 20, soundbutton_img, 0.1)
-
-        if soundButton.draw():
-            if mute == False:
-                mute = True
-                trapsong.set_volume(0)
-                grass_sfx.set_volume(0)
-                explosion_sfx.set_volume(0)
-                flag_sfx.set_volume(0)
-                pygame.time.delay(120)
-            else:
-                mute = False 
-                trapsong.set_volume(0.8)
-                grass_sfx.set_volume(3)
-                explosion_sfx.set_volume(1)
-                flag_sfx.set_volume(1)
-                pygame.time.delay(120)
-
-        
-
+        drawLogo()
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
             print('starting game')
             startGame = True
@@ -544,7 +499,7 @@ while run:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'beginner'
+                difficulty = 'intermediate'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
@@ -559,7 +514,8 @@ while run:
             drawTopPanel()
             drawField()
             
-            #code to take the time and write to file         
+            #code to take the time and write to file
+            
         
         if displayEndGame:
             drawTopPanel()  
