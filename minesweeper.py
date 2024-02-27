@@ -63,7 +63,8 @@ for i in range(1,9):
     numbers[i] = numberPic
 
 def drawLogo(): #draws the minesweeper logo on the starting screen
-    screen.blit(minesweeper_text,(10,100))
+    logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
+    screen.blit(logoImage, (100,70))
     print("nigger")
 
 
