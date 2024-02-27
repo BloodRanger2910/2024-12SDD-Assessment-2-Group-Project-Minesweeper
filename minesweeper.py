@@ -14,7 +14,7 @@ mute = False
 width = 0
 height = 0
 gameWon = False
-
+display_highscore = False
 time = 0
 time_in_menu = 0
 
@@ -48,6 +48,7 @@ floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha(
 soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
 minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
 highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
+highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
 
 scroll = 0
 
@@ -68,6 +69,9 @@ def drawLogo(): #draws the minesweeper logo on the starting screen
     logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
     screen.blit(logoImage, (100,70))
     
+def displayHighScores():
+    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.3))
+    screen.blit(frameImage, (230,10))
 
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -510,6 +514,10 @@ while run:
 
         if highScoreButton.draw() == True:
             print('high scores')
+            display_highscore = True
+
+        if display_highscore:
+            displayHighScores()
         
     else:
         if loadDifficultySelect == False: 
@@ -535,8 +543,7 @@ while run:
             checkWinCondition()
 
         if gameWon and not displayEndGame: #if player wins
-            print('game won!', time)
-            gameOver = True	
+            pass	
 
             
         
