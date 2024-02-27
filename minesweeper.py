@@ -65,7 +65,7 @@ for i in range(1,9):
 def drawLogo(): #draws the minesweeper logo on the starting screen
     logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
     screen.blit(logoImage, (100,70))
-    print("nigger")
+    
 
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
