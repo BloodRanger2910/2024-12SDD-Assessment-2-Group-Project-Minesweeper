@@ -47,6 +47,7 @@ floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
 soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
 minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
+highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
 
 scroll = 0
 
@@ -168,14 +169,6 @@ class square(): #dimensions of a square will be 30x30
 
     def draw(self):
         screen.blit(self.image, (self.rect.x,self.rect.y))
-
-
-
-startButton = button(310, 250, button_img, 1.5)
-exitButton = button(310, 330, exit_img, 1.5)
-beginnerButton = button(300, 200, beginner_img, 1)
-
-
 
 def recordHighScore():
     global time
@@ -493,6 +486,11 @@ clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
+startButton = button(310, 250, button_img, 1.5)
+exitButton = button(310, 330, exit_img, 1.5)
+beginnerButton = button(300, 200, beginner_img, 1)
+highScoreButton = button(150,250, highScore_image,1)
+
 while run:
 
     screen.fill((202,228,241))
@@ -500,7 +498,7 @@ while run:
     if abs(scroll) > backgroundWidth:
         scroll = 0
 
-    if startGame == False: #hides start button once start is clicked
+    if startGame == False: #hides start button once start is clicked, put everything on menu here
         drawBackground()
         drawLogo()
         if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
@@ -509,6 +507,10 @@ while run:
             pygame.time.delay(75)
         if exitButton.draw() == True:
             run = False
+
+        if highScoreButton.draw() == True:
+            print('high scores')
+        
     else:
         if loadDifficultySelect == False: 
             drawBackground()
