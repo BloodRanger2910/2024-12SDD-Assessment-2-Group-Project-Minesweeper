@@ -13,6 +13,7 @@ refreshRate = 60
 mute = False
 width = 0
 height = 0
+gameWon = False
 
 time = 0
 time_in_menu = 0
@@ -473,7 +474,19 @@ def revealGrid():
             playerField[r][c] = 1
     return
 
+def checkWinCondition():
+    global gameWon 
+    global playerField, rows, cols, mines
+    revealed_count = 0
 
+    for row in playerField:
+        for square in row:
+            if square == 1:
+                revealed_count += 1
+
+    total_squares = rows * cols
+    if revealed_count == (total_squares - mines):
+        gameWon = True
 
 #main game loop 
 clock = pygame.time.Clock()
@@ -500,7 +513,7 @@ while run:
         if loadDifficultySelect == False: 
             drawBackground()
             if beginnerButton.draw() == True:
-                difficulty = 'intermediate'
+                difficulty = 'beginner'
                 loadDifficultySelect = True
                 loadGame = True
                 setupGame(difficulty) #initalises the board
@@ -511,11 +524,18 @@ while run:
             drawField()
             drawTopPanel()
 
-        if gameOver and not displayEndGame:
+        if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
             drawTopPanel()
             drawField()
-            
             #code to take the time and write to file
+        
+        if not gameWon and loadGame: #constantly checking if all squares have been revealed
+            checkWinCondition()
+
+        if gameWon and not displayEndGame: #if player wins
+            print('game won!', time)
+            gameOver = True	
+
             
         
         if displayEndGame:
