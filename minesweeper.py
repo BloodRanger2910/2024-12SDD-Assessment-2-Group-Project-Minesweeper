@@ -82,6 +82,8 @@ def displayHighScores():
             topScore = file.readline().strip()
             if topScore == '':
                 topScore = '-'
+            else:
+                topScore += 's'
 
         labelText = font.render(scoreFile.capitalize(), True, colors[scoreFile])
         labelRect = labelText.get_rect()
@@ -90,7 +92,7 @@ def displayHighScores():
 
         scoreText = font.render(str(topScore), True, (0,0,0))
         scoreRect = scoreText.get_rect()
-        scoreRect.center = (410,120+80*n)
+        scoreRect.center = (410,115+80*n)
         screen.blit(scoreText, scoreRect)
 
         
