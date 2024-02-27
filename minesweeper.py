@@ -95,14 +95,11 @@ def displayHighScores():
         scoreRect.center = (410,115+80*n)
         screen.blit(scoreText, scoreRect)
 
-        
-
-    
-
 def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
         for layer in bg_images:
             screen.blit(layer, (i*backgroundWidth + scroll,0))
+            
 
 startGame = False #triggers with start button
 loadDifficultySelect = False #to open difficulty select screen
@@ -138,8 +135,7 @@ def save_highscore(time, highscore_file):
     with open(highscore_file, "r") as file:
         for score in file.readlines():
             if score.strip() != '':
-                highscores.append(float(score.strip()))
-
+                highscores.append(int(score.strip()))
 
     # Add the new score
     highscores.append(time)
@@ -154,7 +150,7 @@ def save_highscore(time, highscore_file):
     with open(highscore_file, "w") as file:
         for score in highscores:
             file.write(f"{score}\n")
-
+            
 class button(): #general button class
     def __init__(self, x, y, image, scale):
         width = image.get_width()
@@ -171,7 +167,6 @@ class button(): #general button class
 
         self.scaledRect = self.img_scaled.get_rect()
         self.scaledRect.topleft = (x-(0.1*width*scale)/2, y - (0.1*height*scale)/2)
-
 
     def draw(self):
         action = False
@@ -244,7 +239,6 @@ def setupGame(difficulty):
 
     time_in_menu = time
     time = 0
-
 
 def drawField(): #render the board
     global minefield
@@ -522,7 +516,6 @@ highScoreButton = button(150,250, highScore_image,1)
 
 
 while run:
-
     screen.fill((202,228,241))
     scroll -= 1
     if abs(scroll) > backgroundWidth:
@@ -594,7 +587,6 @@ while run:
             drawTopPanel() 
             drawField() 
         pass 
-
     
     for event in pygame.event.get():
         clock.tick(refreshRate)
@@ -623,7 +615,6 @@ while run:
             pass
 
     pygame.display.update()
-
 
 #checking empty adjacent squares algorithm
 #function to check all 8 adjacent squares from clicked square
