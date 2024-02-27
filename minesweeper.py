@@ -17,6 +17,7 @@ gameWon = False
 display_highscore = False
 time = 0
 time_in_menu = 0
+file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 'advanced', 'master':'master'}
 
 highscoredata = []
 
@@ -70,9 +71,31 @@ def drawLogo(): #draws the minesweeper logo on the starting screen
     screen.blit(logoImage, (100,70))
     
 def displayHighScores():
-    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.3))
+    global file_names
+    colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
+
+    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.4))
     screen.blit(frameImage, (230,10))
 
+    for n,scoreFile in enumerate(file_names.values()):
+        with open(f'Highscores/highscore_{scoreFile}.txt', "r") as file:
+            topScore = file.readline().strip()
+            if topScore == '':
+                topScore = '-'
+
+        labelText = font.render(scoreFile.capitalize(), True, colors[scoreFile])
+        labelRect = labelText.get_rect()
+        labelRect.center = (410,80+80*n)
+        screen.blit(labelText, labelRect)
+
+        scoreText = font.render(str(topScore), True, (0,0,0))
+        scoreRect = scoreText.get_rect()
+        scoreRect.center = (410,120+80*n)
+        screen.blit(scoreText, scoreRect)
+
+        
+
+    
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
@@ -495,7 +518,6 @@ exitButton = button(310, 330, exit_img, 1.5)
 beginnerButton = button(300, 200, beginner_img, 1)
 highScoreButton = button(150,250, highScore_image,1)
 
-file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'master':'master', 'advanced':'advanced'}
 
 while run:
 
