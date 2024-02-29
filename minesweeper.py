@@ -51,6 +51,8 @@ minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert
 highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
 highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
 close_img = pygame.image.load('images/close_button.png').convert_alpha()
+sound_on_img = pygame.image.load('images/sound_on.png').convert_alpha()
+sound_off_img = pygame.image.load('images/sound_off.png').convert_alpha()
 
 scroll = 0
 
@@ -352,7 +354,10 @@ def drawTopPanel():
     flagRect.center = (width/10 + 70,50)
     screen.blit(flagImg, flagRect)
 
-    soundButton = button((width/10)*9-30, 30, soundbutton_img, 0.1)
+    if mute:
+        soundButton = button((width/10)*9-30, 30, sound_off_img, 0.7)
+    else:
+        soundButton = button((width/10)*9-30, 30, sound_on_img, 0.7)
 
     if soundButton.draw():
         if mute == False:
@@ -559,21 +564,23 @@ clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
-startButton = button(310, 140, button_img, 2.8)
-exitButton = button(310, 330, exit_img, 2.8)
-beginnerButton = button(300, 200, beginner_img, 1)
-highScoreButton = button(315,230, highScore_image,2.6)
 reveal_all_button = button(0, 0, button_img, 1)
+beginnerButton = button(300, 200, beginner_img, 1)
 
-while run:
-    screen.fill((202,228,241))
-    scroll -= 1
-    if abs(scroll) > backgroundWidth:
-        scroll = 0
-    if startGame == False: #hides start button once start is clicked, put everything on menu here
-        drawBackground()
-        drawLogo()
-        if not display_highscore:
+def drawMenu():
+    global startGame, run, display_highscore,mute
+    startButton = button(310, 140, button_img, 2.8)
+    exitButton = button(310, 330, exit_img, 2.8)
+    highScoreButton = button(315,230, highScore_image,2.6)
+    if mute:
+        soundButton = button(740, 385, sound_off_img, 0.8)
+    else:
+        soundButton = button(740, 385, sound_on_img, 0.8)
+
+    drawBackground()
+    drawLogo()
+
+    if not display_highscore:
             if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
                 print('starting game')
                 startGame = True
@@ -581,30 +588,42 @@ while run:
             if exitButton.draw() == True:
                 run = False
 
-        if highScoreButton.draw() == True:
-            print('high scores')
-            display_highscore = True
+    if highScoreButton.draw() == True:
+        print('high scores')
+        display_highscore = True
 
-        if display_highscore:
-            displayHighScores()
+    if display_highscore:
+        displayHighScores()
 
-        soundButton = button(750, 20, soundbutton_img, 0.1)
+    if soundButton.draw():
+        if mute == False:
+            mute = True
+            trapsong.set_volume(0)
+            grass_sfx.set_volume(0)
+            explosion_sfx.set_volume(0)
+            flag_sfx.set_volume(0)
+            pygame.time.delay(120)
+        else:
+            mute = False 
+            trapsong.set_volume(0.8)
+            grass_sfx.set_volume(3)
+            explosion_sfx.set_volume(1)
+            flag_sfx.set_volume(1)
+            pygame.time.delay(120)
 
-        if soundButton.draw():
-            if mute == False:
-                mute = True
-                trapsong.set_volume(0)
-                grass_sfx.set_volume(0)
-                explosion_sfx.set_volume(0)
-                flag_sfx.set_volume(0)
-                pygame.time.delay(120)
-            else:
-                mute = False 
-                trapsong.set_volume(0.8)
-                grass_sfx.set_volume(3)
-                explosion_sfx.set_volume(1)
-                flag_sfx.set_volume(1)
-                pygame.time.delay(120)
+def drawDifficultySelect():
+    drawBackground()
+    pass
+
+
+while run:
+    screen.fill((202,228,241))
+    scroll -= 1
+    if abs(scroll) > backgroundWidth:
+        scroll = 0
+
+    if startGame == False: #hides start button once start is clicked, put everything on menu here
+        drawMenu()
         
     else:
         if loadDifficultySelect == False: 
@@ -620,7 +639,7 @@ while run:
         if loadGame: #commands for when game has been started
             drawField()
             drawTopPanel()
-            test_win_button.draw()
+
 
         if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
             drawTopPanel()
