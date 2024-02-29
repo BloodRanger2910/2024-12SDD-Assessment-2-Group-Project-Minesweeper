@@ -69,7 +69,7 @@ for i in range(1,9):
 
 def drawLogo(): #draws the minesweeper logo on the starting screen
     logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
-    screen.blit(logoImage, (100,70))
+    screen.blit(logoImage, (100,30))
     
 def displayHighScores():
     global file_names, display_highscore
@@ -97,8 +97,11 @@ def displayHighScores():
         screen.blit(scoreText, scoreRect)
 
     closeButton = button(378,390, close_img, 1)
+
     if closeButton.draw():
+        pygame.time.delay(30)
         display_highscore = False
+        pygame.time.delay(30)
 
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -556,10 +559,10 @@ clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
-startButton = button(310, 240, button_img, 2.8)
+startButton = button(310, 140, button_img, 2.8)
 exitButton = button(310, 330, exit_img, 2.8)
 beginnerButton = button(300, 200, beginner_img, 1)
-highScoreButton = button(150,250, highScore_image,1)
+highScoreButton = button(315,230, highScore_image,2.6)
 reveal_all_button = button(0, 0, button_img, 1)
 
 while run:
@@ -570,12 +573,13 @@ while run:
     if startGame == False: #hides start button once start is clicked, put everything on menu here
         drawBackground()
         drawLogo()
-        if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
-            print('starting game')
-            startGame = True
-            pygame.time.delay(75)
-        if exitButton.draw() == True:
-            run = False
+        if not display_highscore:
+            if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
+                print('starting game')
+                startGame = True
+                pygame.time.delay(75)
+            if exitButton.draw() == True:
+                run = False
 
         if highScoreButton.draw() == True:
             print('high scores')
