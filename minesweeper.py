@@ -98,7 +98,7 @@ def displayHighScores():
         scoreRect.center = (410,115+80*n)
         screen.blit(scoreText, scoreRect)
 
-    closeButton = button(378,390, close_img, 1)
+    closeButton = button(378,400, close_img, 1)
 
     if closeButton.draw():
         pygame.time.delay(30)
@@ -570,8 +570,8 @@ beginnerButton = button(300, 200, beginner_img, 1)
 def drawMenu():
     global startGame, run, display_highscore,mute
     startButton = button(310, 140, button_img, 2.8)
-    exitButton = button(317, 330, exit_img, 2.5)
-    highScoreButton = button(315,230, highScore_image,2.6)
+    exitButton = button(319, 330, exit_img, 2.5)
+    highScoreButton = button(317,230, highScore_image,2.6)
     if mute:
         soundButton = button(740, 385, sound_off_img, 0.8)
     else:
