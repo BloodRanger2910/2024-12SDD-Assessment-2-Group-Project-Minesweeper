@@ -50,6 +50,7 @@ soundbutton_img = pygame.image.load('images/soundbutton.jpg').convert_alpha()
 minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
 highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
 highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
+close_img = pygame.image.load('images/close_button.png').convert_alpha()
 
 scroll = 0
 
@@ -71,7 +72,7 @@ def drawLogo(): #draws the minesweeper logo on the starting screen
     screen.blit(logoImage, (100,70))
     
 def displayHighScores():
-    global file_names
+    global file_names, display_highscore
     colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
 
     frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.4))
@@ -94,6 +95,11 @@ def displayHighScores():
         scoreRect = scoreText.get_rect()
         scoreRect.center = (410,115+80*n)
         screen.blit(scoreText, scoreRect)
+
+    closeButton = button(378,390, close_img, 1)
+    if closeButton.draw():
+        display_highscore = False
+
 
 def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
