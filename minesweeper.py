@@ -19,6 +19,7 @@ time = 0
 time_in_menu = 0
 file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 'advanced', 'master':'master'}
 
+
 highscoredata = []
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
@@ -54,6 +55,11 @@ close_img = pygame.image.load('images/close_button.png').convert_alpha()
 sound_on_img = pygame.image.load('images/sound_on.png').convert_alpha()
 sound_off_img = pygame.image.load('images/sound_off.png').convert_alpha()
 
+difficultyButtons = {}
+for x in file_names.values():
+    asset = pygame.image.load(f'images/{x}_button.png').convert_alpha()
+    difficultyButtons[x] = asset
+
 scroll = 0
 
 bg_images = [] #loading background image layers
@@ -61,7 +67,6 @@ for i in range(1,6):
     bg_image = pygame.image.load(f'images/plx-{i}.png').convert_alpha()
     bg_images.append(bg_image)
 backgroundWidth = bg_images[0].get_width()
-
 tiles = math.ceil(menuWidth/backgroundWidth) + 1
 
 numbers = {} #loading numbers 
@@ -612,7 +617,41 @@ def drawMenu():
             pygame.time.delay(120)
 
 def drawDifficultySelect():
+    global difficulty, loadDifficultySelect, loadGame
     drawBackground()
+
+    beginnerSelectButton = button(25,15, difficultyButtons['beginner'],3.5)
+    if beginnerSelectButton.draw():
+        difficulty = 'beginner'
+        loadDifficultySelect = True
+        loadGame = True
+        setupGame(difficulty)
+        pygame.time.delay(75)
+
+    intermediateSelectButton = button(410,15, difficultyButtons['intermediate'],3.5)
+    if intermediateSelectButton.draw():
+        difficulty = 'intermediate'
+        loadDifficultySelect = True
+        loadGame = True
+        setupGame(difficulty)
+        pygame.time.delay(75)
+
+    advancedSelectButton = button(25,220, difficultyButtons['advanced'],3.5)
+    if advancedSelectButton.draw():
+        difficulty = 'advanced'
+        loadDifficultySelect = True
+        loadGame = True
+        setupGame(difficulty)
+        pygame.time.delay(75)
+
+    masterSelectButton = button(410,220, difficultyButtons['master'],3.5)
+    if masterSelectButton.draw():
+        difficulty = 'master'
+        loadDifficultySelect = True
+        loadGame = True
+        setupGame(difficulty)
+        pygame.time.delay(75)
+
     pass
 
 
@@ -627,14 +666,7 @@ while run:
         
     else:
         if loadDifficultySelect == False: 
-            drawBackground()
-            if beginnerButton.draw() == True:
-                difficulty = 'beginner'
-                loadDifficultySelect = True
-                loadGame = True
-                setupGame(difficulty) #initalises the board
-                print(time_in_menu)
-                pygame.time.delay(75)
+            drawDifficultySelect()
             
         if loadGame: #commands for when game has been started
             drawField()
