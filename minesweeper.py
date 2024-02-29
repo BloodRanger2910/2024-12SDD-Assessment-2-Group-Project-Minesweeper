@@ -556,8 +556,8 @@ clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
-startButton = button(310, 250, button_img, 1.5)
-exitButton = button(310, 330, exit_img, 1.5)
+startButton = button(310, 240, button_img, 2.8)
+exitButton = button(310, 330, exit_img, 2.8)
 beginnerButton = button(300, 200, beginner_img, 1)
 highScoreButton = button(150,250, highScore_image,1)
 reveal_all_button = button(0, 0, button_img, 1)
