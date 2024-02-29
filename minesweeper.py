@@ -523,6 +523,30 @@ def checkWinCondition():
         gameWon = True
         displayEndGame = True
 #checks if the amount of revealed squares are the same as the amount of non mine squares
+        
+def reset_game_stats():
+    global menuHeight, menuWidth,width,height,gameWon,time,rows,cols,mines,startGame,loadDifficultySelect,loadGame, minefield,playerField,gameOver
+    global flagsPlaced, displayEndGame, firstClickDone, screen
+    
+    menuHeight = 432
+    menuWidth = 800
+    screen = pygame.display.set_mode((menuWidth,menuHeight))
+    width = 0
+    height = 0
+    gameWon = False
+    time = 0
+    rows,cols,mines = 0,0,0
+    startGame = False #triggers with start button
+    loadDifficultySelect = False #to open difficulty select screen
+    loadGame = False #to setup game         
+    minefield = None #stores the minefield (-1 for mine), pre laced with mine counts
+    playerField = None #the field that the player sees, 0 for unrevealed, 1 for revealed, 2 for flagged
+    gameOver = False #triggers when player steps on a mine
+    flagsPlaced = 0
+    displayEndGame = False
+    firstClickDone = False
+    print('reset!')
+    pass
 
 
 test_win_button = TestWinButton(50, 50, 200, 50, "Test Win")
@@ -543,7 +567,6 @@ while run:
     scroll -= 1
     if abs(scroll) > backgroundWidth:
         scroll = 0
-
     if startGame == False: #hides start button once start is clicked, put everything on menu here
         drawBackground()
         drawLogo()
@@ -600,7 +623,7 @@ while run:
             drawField()
             #code to take the time and write to file
         
-        if not gameWon and loadGame: #constantly checking if all squares have been revealed
+        if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
             checkWinCondition()
 
         if gameWon and not displayEndGame: #if player wins
@@ -610,8 +633,26 @@ while run:
         if displayEndGame:
             drawTopPanel() 
             drawField() 
-            checkWinCondition()
-        pass 
+
+        if gameWon:
+            # Render the win screen
+                screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
+                win_font = pygame.font.Font(None, 100)
+                win_text = win_font.render("Congratulations!", True, (255, 255, 255))
+                win_rect = win_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
+                screen.blit(win_text, win_rect)
+                pygame.display.flip()  # Update the display
+           
+        if gameOver:
+            # Render the lose screen
+            screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
+            #loss_font = pygame.font.Font(None, 100)
+            #loss_text = loss_font.render("Game Over!", True, (255, 255, 255))
+            #loss_rect = loss_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
+            #screen.blit(loss_text, loss_rect)
+            #pygame.display.flip()  
+            reset_game_stats() #reset game statistics
+        
     
     for event in pygame.event.get():
         clock.tick(refreshRate)
@@ -644,33 +685,6 @@ while run:
     if test_win_button.clicked:
         gameWon = True
         displayEndGame = True
-
-    if displayEndGame:
-        if gameWon:
-            # Render the win screen
-                screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
-                win_font = pygame.font.Font(None, 100)
-                win_text = win_font.render("Congratulations!", True, (255, 255, 255))
-                win_rect = win_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
-                screen.blit(win_text, win_rect)
-                pygame.display.flip()  # Update the display
-
-                while True:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            run = False  # Exit the game loop and quit the game
-                            break  # Exit the nested event loop as well
-                    if not run:
-                        break
-           
-    if gameOver and not game_over:
-        # Render the lose screen
-        screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
-        loss_font = pygame.font.Font(None, 100)
-        loss_text = loss_font.render("Game Over!", True, (255, 255, 255))
-        loss_rect = loss_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
-        screen.blit(loss_text, loss_rect)
-        pygame.display.flip()  # Update the display
 
         while True:
             for event in pygame.event.get():
