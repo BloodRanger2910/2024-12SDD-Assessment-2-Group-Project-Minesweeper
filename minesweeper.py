@@ -77,8 +77,8 @@ def displayHighScores():
     global file_names, display_highscore
     colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
 
-    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *1.3, highScore_frame.get_height()*1.4))
-    screen.blit(frameImage, (230,10))
+    frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *3, highScore_frame.get_height()*3))
+    screen.blit(frameImage, (270,20))
 
     for n,scoreFile in enumerate(file_names.values()):
         with open(f'Highscores/highscore_{scoreFile}.txt', "r") as file:
@@ -570,7 +570,7 @@ beginnerButton = button(300, 200, beginner_img, 1)
 def drawMenu():
     global startGame, run, display_highscore,mute
     startButton = button(310, 140, button_img, 2.8)
-    exitButton = button(310, 330, exit_img, 2.8)
+    exitButton = button(317, 330, exit_img, 2.5)
     highScoreButton = button(315,230, highScore_image,2.6)
     if mute:
         soundButton = button(740, 385, sound_off_img, 0.8)
