@@ -620,7 +620,7 @@ def drawDifficultySelect():
     global difficulty, loadDifficultySelect, loadGame
     drawBackground()
 
-    beginnerSelectButton = button(25,15, difficultyButtons['beginner'],3.5)
+    beginnerSelectButton = button(20,15, difficultyButtons['beginner'],1)
     if beginnerSelectButton.draw():
         difficulty = 'beginner'
         loadDifficultySelect = True
@@ -628,7 +628,7 @@ def drawDifficultySelect():
         setupGame(difficulty)
         pygame.time.delay(75)
 
-    intermediateSelectButton = button(410,15, difficultyButtons['intermediate'],3.5)
+    intermediateSelectButton = button(410,15, difficultyButtons['intermediate'],1)
     if intermediateSelectButton.draw():
         difficulty = 'intermediate'
         loadDifficultySelect = True
@@ -636,7 +636,7 @@ def drawDifficultySelect():
         setupGame(difficulty)
         pygame.time.delay(75)
 
-    advancedSelectButton = button(25,220, difficultyButtons['advanced'],3.5)
+    advancedSelectButton = button(20,220, difficultyButtons['advanced'],1)
     if advancedSelectButton.draw():
         difficulty = 'advanced'
         loadDifficultySelect = True
@@ -644,7 +644,7 @@ def drawDifficultySelect():
         setupGame(difficulty)
         pygame.time.delay(75)
 
-    masterSelectButton = button(410,220, difficultyButtons['master'],3.5)
+    masterSelectButton = button(410,220, difficultyButtons['master'],1)
     if masterSelectButton.draw():
         difficulty = 'master'
         loadDifficultySelect = True
