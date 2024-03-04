@@ -41,7 +41,8 @@ flag_sfx = pygame.mixer.Sound('sounds/flag sfx.mp3')
 #loading image assets
 button_img = pygame.image.load('images/start_btn.png').convert_alpha()
 exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
-beginner_img = pygame.image.load('images/button_resume.png').convert_alpha()
+resume_img = pygame.image.load('images/resume_btn.png').convert_alpha() #if not work, rename to resume_button
+menu_img - pygame.image.load('image/menu_btn')
 mine_img = pygame.image.load('images/landmine.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
@@ -278,12 +279,21 @@ def setupGame(difficulty):
     time_in_menu = time
     time = 0
 
-def drawPause(): 
+def drawPause():
+    global pause 
+    global run
     surface = pygame.Surface((width, height), pygame.SRCALPHA) 
     pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, width, height])
     screen.blit(surface, (0,0))
-    exitButton = button(319, 330, exit_img, 2.5)
 
+    resumeButton = button(width/2 - resume_img.get_width()*1.25, height/2 - 20, resume_img, 2.5)
+    if resumeButton.draw():
+        pause = False
+
+    menuButton = button(width/2 - menu_img.get_width()*1.25, height/2 + 60, menu_img, 2.5)
+    if menuButton.draw():
+        reset_game_stats()
+        pause = False
 
 
 def drawField(): #render the board
@@ -585,7 +595,6 @@ run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
 reveal_all_button = button(0, 0, button_img, 1)
-beginnerButton = button(300, 200, beginner_img, 1)
 
 def drawMenu():
     global startGame, run, display_highscore,mute
