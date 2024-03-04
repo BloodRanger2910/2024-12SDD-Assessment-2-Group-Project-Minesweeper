@@ -195,6 +195,7 @@ class button(): #general button class
             screen.blit(self.img_scaled, (self.scaledRect.x, self.scaledRect.y))
 
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                pygame.time.delay(100)
                 self.clicked = True
                 action = True
         else:
