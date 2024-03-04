@@ -10,6 +10,7 @@ pygame.init()
 menuHeight = 432
 menuWidth = 800
 refreshRate = 60
+pause = False
 mute = False
 width = 0
 height = 0
@@ -23,6 +24,7 @@ file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 
 highscoredata = []
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
+
 pygame.display.set_caption('Minesweeper')
 rows,cols,mines = 0,0,0
 
@@ -276,6 +278,11 @@ def setupGame(difficulty):
     time_in_menu = time
     time = 0
 
+def drawPause(): 
+    surface = pygame.Surface((width, height), pygame.SRCALPHA) 
+    pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, width, height])
+    screen.blit(surface, (0,0))
+
 def drawField(): #render the board
     global minefield
     global playerField
@@ -334,6 +341,11 @@ def drawField(): #render the board
     pass
     #perhaps make it so that when player clicks, the box dissapears and reveals number below it?
 
+
+    
+def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
+    neighbours = []
+
 def drawTopPanel():
     global clock_img
     global width
@@ -381,8 +393,7 @@ def drawTopPanel():
             flag_sfx.set_volume(1)
             pygame.time.delay(120)
 
-def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
-    neighbours = []
+
 
     if row > 0: #up
         neighbours.append((row-1,col))
@@ -403,6 +414,8 @@ def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a
         neighbours.append((row+1,col+1))
 
     return neighbours
+
+
 
 def generateGrid(rows,cols,mines):
     field = [[0 for _ in range(cols)] for _ in range(rows)]
@@ -673,6 +686,8 @@ while run:
             drawField()
             drawTopPanel()
 
+        if pause:
+            drawPause()
 
         if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
             drawTopPanel()
@@ -714,19 +729,25 @@ while run:
         clock.tick(refreshRate)
         mouse = pygame.mouse.get_pressed()
 
-        if event.type == pygame.USEREVENT and not gameOver and not gameWon:
+        if event.type == pygame.USEREVENT and not gameOver and not gameWon and not pause:
             time += 1
         if event.type == pygame.QUIT:
             run = False 
-
-        if loadGame == True and mouse[0]: #detect left click on grid
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                if pause:
+                    pause = False
+                else:
+                    pause = True
+                
+        if loadGame == True and mouse[0] and not pause: #detect left click on grid
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
             if row > rows or cols > cols:
                 continue
             leftClick(row,col)
 
-        if loadGame == True and mouse[2]: #detect right click and place flag
+        if loadGame == True and mouse[2] and not pause: #detect right click and place flag
             mousePos = pygame.mouse.get_pos()
             row,col = getClickedCords(mousePos)
             rightClick(row,col)
