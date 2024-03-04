@@ -282,6 +282,9 @@ def drawPause():
     surface = pygame.Surface((width, height), pygame.SRCALPHA) 
     pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, width, height])
     screen.blit(surface, (0,0))
+    exitButton = button(319, 330, exit_img, 2.5)
+
+
 
 def drawField(): #render the board
     global minefield
