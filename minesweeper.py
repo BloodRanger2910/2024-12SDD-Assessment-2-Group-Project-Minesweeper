@@ -342,10 +342,6 @@ def drawField(): #render the board
     #perhaps make it so that when player clicks, the box dissapears and reveals number below it?
 
 
-    
-def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
-    neighbours = []
-
 def drawTopPanel():
     global clock_img
     global width
@@ -394,6 +390,8 @@ def drawTopPanel():
             pygame.time.delay(120)
 
 
+def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
+    neighbours = []
 
     if row > 0: #up
         neighbours.append((row-1,col))
