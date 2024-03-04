@@ -42,7 +42,7 @@ flag_sfx = pygame.mixer.Sound('sounds/flag sfx.mp3')
 button_img = pygame.image.load('images/start_btn.png').convert_alpha()
 exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
 resume_img = pygame.image.load('images/resume_btn.png').convert_alpha() #if not work, rename to resume_button
-menu_img - pygame.image.load('image/menu_btn')
+menu_img = pygame.image.load('images/menu_btn.png').convert_alpha()
 mine_img = pygame.image.load('images/landmine.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
 flag_custom_img = pygame.image.load('images/flag_custom.png').convert_alpha()
