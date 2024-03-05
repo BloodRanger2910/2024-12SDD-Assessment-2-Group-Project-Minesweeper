@@ -18,6 +18,7 @@ gameWon = False
 display_highscore = False
 time = 0
 time_in_menu = 0
+eula_agreement = False
 file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 'advanced', 'master':'master'}
 
 #load font
@@ -63,6 +64,8 @@ sound_off_img = pygame.image.load('images/sound_off.png').convert_alpha()
 win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 panel_img = pygame.image.load("images/panel_bg.png").convert_alpha()
+eula_img = pygame.image.load("images/eula.png").convert_alpha()
+
 
 difficultyButtons = {} 
 for x in file_names.values():
@@ -603,6 +606,22 @@ def reset_game_stats():
     print('reset!')
     pass
 
+def drawEULA(): #work in progrss
+    global eula_agreement
+
+    print('eula')
+
+    #surface = pygame.Surface((menuWidth, menuHeight), pygame.SRCALPHA) 
+    #pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, menuWidth, menuHeight])
+    #screen.blit(surface, (0,0))
+
+    eula = pygame.transform.scale(eula_img, (eula_img.get_width()*0.5, eula_img.get_height()*0.5))
+    eula_rect = eula.get_rect()
+    eula_rect.center = (400,100)
+    screen.blit(eula_img, eula_rect)
+
+
+
 
 test_win_button = TestWinButton(50, 50, 200, 50, "Test Win")
 
@@ -699,8 +718,12 @@ def drawDifficultySelect():
 while run:
     screen.fill((202,228,241))
     scroll -= 1
+
     if abs(scroll) > backgroundWidth:
         scroll = 0
+
+    if eula_agreement == False:
+        drawEULA()
 
     if startGame == False: #hides start button once start is clicked, put everything on menu here
         drawMenu()
