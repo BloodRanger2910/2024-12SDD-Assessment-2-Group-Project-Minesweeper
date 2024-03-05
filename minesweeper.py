@@ -620,9 +620,10 @@ def drawEULA(): #work in progrss
     eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
 
-    exitBtn = button(335,350,exit_img,2)
+    exitBtn = button(335,300,exit_img,2)
 
     if exitBtn.draw():
+        pygame.time.delay(100)
         eula_agreement = True
 
 
