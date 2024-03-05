@@ -62,6 +62,7 @@ sound_on_img = pygame.image.load('images/sound_on.png').convert_alpha()
 sound_off_img = pygame.image.load('images/sound_off.png').convert_alpha()
 win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
+panel_img = pygame.image.load("images/panel_bg.png").convert_alpha()
 
 difficultyButtons = {} 
 for x in file_names.values():
@@ -367,6 +368,13 @@ def drawTopPanel():
     global width
     global height
     global mute
+
+    background = pygame.transform.scale(panel_img, (panel_img.get_width(), panel_img.get_height()))
+    background_rect = background.get_rect()
+    background_rect.topleft = (0,0)
+    screen.blit(background,background_rect)
+
+
     
     timeText = font.render(str(time), True, (0,0,0))
     textRect = timeText.get_rect()
