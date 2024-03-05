@@ -611,14 +611,19 @@ def drawEULA(): #work in progrss
 
     print('eula')
 
-    #surface = pygame.Surface((menuWidth, menuHeight), pygame.SRCALPHA) 
-    #pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, menuWidth, menuHeight])
-    #screen.blit(surface, (0,0))
+    surface = pygame.Surface((menuWidth, menuHeight), pygame.SRCALPHA) 
+    pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, menuWidth, menuHeight])
+    screen.blit(surface, (0,0))
 
-    eula = pygame.transform.scale(eula_img, (eula_img.get_width()*0.5, eula_img.get_height()*0.5))
+    eula = pygame.transform.scale(eula_img, (eula_img.get_width(), eula_img.get_height()))
     eula_rect = eula.get_rect()
-    eula_rect.center = (400,100)
+    eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
+
+    exitBtn = button(50,50,exit_img,0.75)
+
+    if exitBtn.draw():
+        eula_agreement = True
 
 
 
@@ -721,14 +726,14 @@ while run:
 
     if abs(scroll) > backgroundWidth:
         scroll = 0
-
+    
     if eula_agreement == False:
         drawEULA()
 
-    if startGame == False: #hides start button once start is clicked, put everything on menu here
+    if startGame == False and eula_agreement: #hides start button once start is clicked, put everything on menu here
         drawMenu()
-        
-    else: 
+
+    elif startGame: 
         if loadDifficultySelect == False:  
             drawDifficultySelect() 
              
