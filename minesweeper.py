@@ -620,7 +620,7 @@ def drawEULA(): #work in progrss
     eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
 
-    exitBtn = button(50,50,exit_img,0.75)
+    exitBtn = button(335,350,exit_img,2)
 
     if exitBtn.draw():
         eula_agreement = True
@@ -728,6 +728,7 @@ while run:
         scroll = 0
     
     if eula_agreement == False:
+        drawBackground()
         drawEULA()
 
     if startGame == False and eula_agreement: #hides start button once start is clicked, put everything on menu here
