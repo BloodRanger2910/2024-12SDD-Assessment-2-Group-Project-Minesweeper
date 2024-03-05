@@ -20,6 +20,9 @@ time = 0
 time_in_menu = 0
 file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 'advanced', 'master':'master'}
 
+#load font
+munro_font = pygame.font.Font("munro.ttf", 36)
+
 
 highscoredata = []
 
@@ -57,8 +60,10 @@ highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
 close_img = pygame.image.load('images/close_button.png').convert_alpha()
 sound_on_img = pygame.image.load('images/sound_on.png').convert_alpha()
 sound_off_img = pygame.image.load('images/sound_off.png').convert_alpha()
+win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
+loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 
-difficultyButtons = {}
+difficultyButtons = {} 
 for x in file_names.values():
     asset = pygame.image.load(f'images/{x}_button.png').convert_alpha()
     difficultyButtons[x] = asset
@@ -132,6 +137,8 @@ textRect = None
 flagsPlaced = 0
 displayEndGame = False
 firstClickDone = False
+loss_displayed = False
+win_displayed = False
 
 
 def insertion_sort(arr):
@@ -209,22 +216,22 @@ class button(): #general button class
 
         return action
     
-class TestWinButton:
-    def __init__(self, x, y, width, height, text):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.text = text
-        self.clicked = False
+class TestWinButton: 
+    def __init__(self, x, y, width, height, text): 
+        self.rect = pygame.Rect(x, y, width, height) 
+        self.text = text 
+        self.clicked = False 
 
-    def draw(self):
-        pygame.draw.rect(screen, (0, 255, 0), self.rect)
+    def draw(self): 
+        pygame.draw.rect(screen, (0, 255, 0), self.rect) 
         font = pygame.font.Font(None, 36)
         text_surface = font.render(self.text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=self.rect.center)
-        screen.blit(text_surface, text_rect)
+        screen.blit(text_surface, text_rect) 
 
     def check_click(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
+        if event.type == pygame.MOUSEBUTTONDOWN: 
+            if self.rect.collidepoint(event.pos): 
                 self.clicked = True
     
 class square(): #dimensions of a square will be 30x30
@@ -564,7 +571,7 @@ def checkWinCondition():
         
 def reset_game_stats():
     global menuHeight, menuWidth,width,height,gameWon,time,rows,cols,mines,startGame,loadDifficultySelect,loadGame, minefield,playerField,gameOver
-    global flagsPlaced, displayEndGame, firstClickDone, screen
+    global flagsPlaced, displayEndGame, firstClickDone, screen, win_displayed, loss_displayed
     
     menuHeight = 432
     menuWidth = 800
@@ -583,6 +590,8 @@ def reset_game_stats():
     flagsPlaced = 0
     displayEndGame = False
     firstClickDone = False
+    loss_displayed = False
+    win_displayed = False
     print('reset!')
     pass
 
@@ -677,8 +686,8 @@ def drawDifficultySelect():
         pygame.time.delay(75)
 
     pass
-
-
+ 
+ 
 while run:
     screen.fill((202,228,241))
     scroll -= 1
@@ -688,13 +697,13 @@ while run:
     if startGame == False: #hides start button once start is clicked, put everything on menu here
         drawMenu()
         
-    else:
-        if loadDifficultySelect == False: 
-            drawDifficultySelect()
-            
-        if loadGame: #commands for when game has been started
-            drawField()
-            drawTopPanel()
+    else: 
+        if loadDifficultySelect == False:  
+            drawDifficultySelect() 
+             
+        if loadGame: #commands for when game has been started 
+            drawField() 
+            drawTopPanel() 
 
         if pause:
             drawPause()
@@ -707,33 +716,61 @@ while run:
         if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
             checkWinCondition()
 
-        if gameWon and not displayEndGame: #if player wins
+        if gameWon and not displayEndGame: #if player wins 
             save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}')	
             displayEndGame = True
         
         if displayEndGame:
             drawTopPanel() 
-            drawField() 
+            
 
-        if gameWon:
-            # Render the win screen
-                screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
-                win_font = pygame.font.Font(None, 100)
-                win_text = win_font.render("Congratulations!", True, (255, 255, 255))
-                win_rect = win_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
-                screen.blit(win_text, win_rect)
-                pygame.display.flip()  # Update the display
-           
-        if gameOver:
-            # Render the lose screen
-            screen = pygame.display.set_mode((menuWidth, menuHeight))  # Set the mode to the menu size
-            #loss_font = pygame.font.Font(None, 100)
-            #loss_text = loss_font.render("Game Over!", True, (255, 255, 255))
-            #loss_rect = loss_text.get_rect(center=(menuWidth // 2, menuHeight // 2))
-            #screen.blit(loss_text, loss_rect)
-            #pygame.display.flip()  
-            reset_game_stats() #reset game statistics
-        
+    if gameWon and not displayEndGame and win_displayed == False:
+                    win_displayed = True
+                    print("You Win!")
+                    screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    # Display the win screen image
+                    screen.blit(win_screen_img, (0, 0))
+
+                    # Display difficulty and time taken
+                    difficulty_text = munro_font.render("Difficulty: Beginner", True, (255, 255, 255))
+                    screen.blit(difficulty_text, (menuWidth // 2 - difficulty_text.get_width() // 2, 200))
+
+                    time_text = munro_font.render("Time Taken: 00:00", True, (255, 255, 255))
+                    screen.blit(time_text, (menuWidth // 2 - time_text.get_width() // 2, 250))
+                    win_displayed = True
+
+                    win_text = munro_font.render("You Win!", True, (255, 255, 255))
+                    screen.blit(win_text, (menuWidth // 2 - win_text.get_width() // 2, 100))
+                    pygame.display.flip()
+                    print("gameWon:", gameWon)
+                    print("Win displayed:", win_displayed)
+
+                    pygame.time.delay(1000)
+                    reset_game_stats()
+                    pass
+
+    if gameOver and loss_displayed == False:
+                    loss_displayed = True
+                    print("You Lose!")
+                    screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    # Display the loss screen image
+                    screen.blit(loss_screen_img, (0, 0))
+ 
+                    # Display difficulty
+                    difficulty_text = munro_font.render("Difficulty: Beginner", True, (255, 255, 255))
+                    screen.blit(difficulty_text, (menuWidth // 2 - difficulty_text.get_width() // 2, 200))
+                    #loss text
+                    loss_text = munro_font.render("You Lose!", True, (255, 255, 255))
+                    screen.blit(loss_text, (menuWidth // 2 - loss_text.get_width() // 2, 100))
+                    pygame.display.flip()
+                    print("gameOver:", gameOver)
+                    print("Loss displayed:", loss_displayed)
+ 
+                    pygame.time.delay(1000)
+                    reset_game_stats()
+                    pass
+
+    
     
     for event in pygame.event.get():
         clock.tick(refreshRate)
@@ -780,6 +817,8 @@ while run:
                     break  # Exit the nested event loop as well
             if not run:
                 break  # Exit the main event loop if run is False
+
+
     pygame.display.update()
 
 #checking empty adjacent squares algorithm
