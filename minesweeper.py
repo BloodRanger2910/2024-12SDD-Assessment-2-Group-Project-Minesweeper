@@ -20,6 +20,9 @@ time = 0
 time_in_menu = 0
 eula_agreement = False
 file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 'advanced', 'master':'master'}
+eula_clicked = False
+no_of_clicks_eula = 0
+events = []
 
 #load font
 munro_font = pygame.font.Font("munro.ttf", 36)
@@ -203,23 +206,28 @@ class button(): #general button class
         action = False
         #get position of mouse
         pos = pygame.mouse.get_pos()
+        global events
 
         #check if mouse is over button
-        if self.rect.collidepoint(pos) == True:
+        if self.rect.collidepoint(pos):
             screen.blit(self.img_scaled, (self.scaledRect.x, self.scaledRect.y))
-
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                pygame.time.delay(100)
-                self.clicked = True
-                action = True
         else:
             screen.blit(self.image, (self.rect.x, self.rect.y))
 
-        if pygame.mouse.get_pressed()[0] ==  0:
-            self.clicked = False
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.clicked == False and self.rect.collidepoint(pos):
+                self.clicked = True
+                action = True
+                events = []
+                return action
+
+        
+        if pygame.mouse.get_pressed()[0] == 0:
+                self.clicked = False
 
         return action
-    
+
+
 class TestWinButton: 
     def __init__(self, x, y, width, height, text): 
         self.rect = pygame.Rect(x, y, width, height) 
@@ -608,8 +616,9 @@ def reset_game_stats():
 
 def drawEULA(): #work in progrss
     global eula_agreement
+    global eula_clicked
+    global no_of_clicks_eula
 
-    print('eula')
 
     surface = pygame.Surface((menuWidth, menuHeight), pygame.SRCALPHA) 
     pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, menuWidth, menuHeight])
@@ -622,8 +631,8 @@ def drawEULA(): #work in progrss
 
     exitBtn = button(335,300,exit_img,2)
 
-    if exitBtn.draw():
-        pygame.time.delay(100)
+    if exitBtn.draw() and no_of_clicks_eula < 1:
+        pygame.time.wait(100)
         eula_agreement = True
 
 
@@ -643,6 +652,7 @@ def drawMenu():
     startButton = button(310, 140, button_img, 2.8)
     exitButton = button(319, 330, exit_img, 2.5)
     highScoreButton = button(317,230, highScore_image,2.6)
+
     if mute:
         soundButton = button(740, 385, sound_off_img, 0.8)
     else:
@@ -809,9 +819,11 @@ while run:
                     pass
 
     
+    clock.tick(refreshRate)
+    events = pygame.event.get()
+    print(events)
     
-    for event in pygame.event.get():
-        clock.tick(refreshRate)
+    for event in events:
         mouse = pygame.mouse.get_pressed()
 
         if event.type == pygame.USEREVENT and not gameOver and not gameWon and not pause:
