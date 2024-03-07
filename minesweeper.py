@@ -71,6 +71,7 @@ eula_img = pygame.image.load("images/eula.png").convert_alpha()
 howto_img = pygame.image.load("images/howto.png").convert_alpha()
 reset_button_img = pygame.image.load("images/reset_button.png").convert_alpha()
 howto_img = pygame.image.load("images/howto.png").convert_alpha()
+play_img = pygame.image.load("images/play_btn.png").convert_alpha()
  
 # Get the image rect for positioning and collision detection
 reset_button_rect = reset_button_img.get_rect()
@@ -644,7 +645,7 @@ def drawEULA(): #work in progrss
     eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
 
-    exitBtn = button(335,300,exit_img,2)
+    exitBtn = button(335,300,play_img,2)
 
     if exitBtn.draw() and no_of_clicks_eula < 1:
         pygame.time.wait(100)
