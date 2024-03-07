@@ -67,6 +67,7 @@ win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 panel_img = pygame.image.load("images/panel_bg.png").convert_alpha()
 eula_img = pygame.image.load("images/eula.png").convert_alpha()
+howto_img = pygame.image.load("images/howto.png").convert_alpha()
 
 
 difficultyButtons = {} 
