@@ -646,7 +646,7 @@ def drawEULA(): #work in progrss
     eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
 
-    exitBtn = button(335,300,exit_img,2)
+    exitBtn = button(335,300,play_img,2)
 
     if exitBtn.draw() and no_of_clicks_eula < 1:
         pygame.time.wait(100)
@@ -820,7 +820,7 @@ while run:
                     reset_button = button(450, 250, reset_button_img, 2.5)
                     screen.blit(background_image, background_rect)
                     topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-                    alpha_value = 0  # This sets the transparency to 50% (0 is fully transparent, 255 is fully opaque)
+                    alpha_value = 0  
                     topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                     font = pygame.font.SysFont(None, 36)  # Choose a font and size
                     for i, score in enumerate(topScores):
@@ -870,7 +870,7 @@ while run:
                     reset_button = button(450, 250, reset_button_img, 2.5)
                     screen.blit(background_image, background_rect)
                     topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-                    alpha_value = 0  # This sets the transparency to 50% (0 is fully transparent, 255 is fully opaque)
+                    alpha_value = 0  
                     topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                     font = pygame.font.SysFont(None, 36)  # Choose a font and size
                     for i, score in enumerate(topScores):
