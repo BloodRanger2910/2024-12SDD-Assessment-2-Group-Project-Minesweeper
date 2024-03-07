@@ -71,19 +71,10 @@ eula_img = pygame.image.load("images/eula.png").convert_alpha()
 howto_img = pygame.image.load("images/howto.png").convert_alpha()
 reset_button_img = pygame.image.load("images/reset_button.png").convert_alpha()
 howto_img = pygame.image.load("images/howto.png").convert_alpha()
- 
-# Get the image rect for positioning and collision detection
-reset_button_rect = reset_button_img.get_rect()
+background_image = pygame.image.load("images/frame.png").convert_alpha()
 
-# Set the position of the reset button
-reset_button_rect.x = 100  # Replace x with the desired x-coordinate
-reset_button_rect.y = 100  # Replace y with the desired y-coordinate
 
-# Create a transparent rect object to overlap the image
-transparent_rect = pygame.Rect(reset_button_rect)
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+background_rect = background_image.get_rect()
 
 difficultyButtons = {} 
 for x in file_names.values():
@@ -140,7 +131,18 @@ def displayHighScores():
         display_highscore = False
         pygame.time.delay(30)
 
-
+def get_top_scores(difficulty):
+    topScores = []
+    for n,scoreFile in enumerate(file_names.values()):
+        with open(f'Highscores/highscore_{difficulty}.txt','r') as file:
+            topScores = file.readlines(5)
+            if topScores == '':
+                topScores = '-'
+            else:
+                topScores += 's'
+                topScores = [x.strip() for x in topScores]
+    return topScores
+    
 def drawBackground(): #draws background on starting screen and difficulty select screen
     for i in range(tiles):
         for layer in bg_images:
@@ -744,9 +746,13 @@ def drawDifficultySelect():
         pygame.time.delay(75)
 
     pass
+
  
- 
+
+
+
 while run:
+    clock.tick(refreshRate)
     screen.fill((202,228,241))
     scroll -= 1
 
@@ -774,7 +780,7 @@ while run:
         if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
             drawTopPanel()
             drawField()
-            #code to take the time and write to file
+            
         
         if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
             checkWinCondition()
@@ -787,9 +793,8 @@ while run:
             drawTopPanel() 
             
 
+
     if gameWon and win_displayed == False:
-                    #put the endgame code here if win
-                    win_displayed = True
                     print("You Win!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
                     # Display the win screen image
@@ -800,29 +805,46 @@ while run:
                     screen.blit(difficulty_text, (menuWidth // 2 - difficulty_text.get_width() // 2, 200))
 
                     time_text = munro_font.render("Time Taken: "+ str(time), True, (255, 255, 255))
-                    screen.blit(time_text, (menuWidth // 2 - time_text.get_width() // 2, 250))
-                    win_displayed = True
+                    screen.blit(time_text, (menuWidth // 2 - time_text.get_width() // 2, 150))
 
                     win_text = munro_font.render("You Win!", True, (255, 255, 255))
                     screen.blit(win_text, (menuWidth // 2 - win_text.get_width() // 2, 100))
                     pygame.display.flip()
                     print("gameWon:", gameWon)
                     print("Win displayed:", win_displayed)
+                    topScores = get_top_scores(difficulty)
 
-                    reset_button = button(300, 250, reset_button_img, 1)
-                    screen.blit(reset_button_img, (300, 250))
-                    pygame.display.update()
-                    # Check if the mouse is over the reset button
-                    while gameWon and win_displayed == False:
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                sys.exit()
-                            if event.type == pygame.MOUSEBUTTONDOWN:
-                                # Set the x, y positions of the mouse click
-                                x, y = event.pos
-                                if reset_button_img.get_rect(topleft=(300, 250)).collidepoint(x, y):
-                                    reset_game_stats()
+                    x_position = 25
+                    y_position = 25
+ 
+                    reset_button = button(450, 250, reset_button_img, 2.5)
+                    screen.blit(background_image, background_rect)
+                    topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                    alpha_value = 0  # This sets the transparency to 50% (0 is fully transparent, 255 is fully opaque)
+                    topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                    font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                    for i, score in enumerate(topScores):
+                        text_surface = font.render( score, True, (255, 255, 255))  # Render the text
+                        topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
                     
+                    # Blit the topScores_surface onto the background image at the desired position
+                    screen.blit(topScores_surface, (x_position, y_position))
+
+                    reset_button = button(450, 250, reset_button_img, 2.5)
+        
+                    pygame.display.update() 
+                
+                    if reset_button.draw():
+                        reset_game_stats()
+
+                    exitButton = button(250, 250, exit_img, 2.5)
+                    if exitButton.draw():
+                        pygame.quit()
+
+                    pygame.display.update()
+
+                    
+
 
 
     if gameOver and loss_displayed == False:
@@ -838,24 +860,38 @@ while run:
                     #loss text
                     loss_text = munro_font.render("You Lose!", True, (255, 255, 255))
                     screen.blit(loss_text, (menuWidth // 2 - loss_text.get_width() // 2, 100))
-                    pygame.display.flip()
                     print("gameOver:", gameOver)
                     print("Loss displayed:", loss_displayed)
+                    topScores = get_top_scores(difficulty)
+
+                    x_position = 25
+                    y_position = 25
  
-                    reset_button = button(300, 250, reset_button_img, 1)
-                    screen.blit(reset_button_img, (300, 250))
-                    pygame.display.update()
-                    # Check if the mouse is over the reset button
-                    while gameOver and loss_displayed == False:
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                sys.exit()
-                            if event.type == pygame.MOUSEBUTTONDOWN:
-                                # Set the x, y positions of the mouse click
-                                x, y = event.pos
-                                if reset_button_img.get_rect(topleft=(300, 250)).collidepoint(x, y):
-                                    reset_game_stats()
+                    reset_button = button(450, 250, reset_button_img, 2.5)
+                    screen.blit(background_image, background_rect)
+                    topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                    alpha_value = 0  # This sets the transparency to 50% (0 is fully transparent, 255 is fully opaque)
+                    topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                    font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                    for i, score in enumerate(topScores):
+                        text_surface = font.render( score, True, (255, 255, 255))  # Render the text
+                        topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
                     
+                    # Blit the topScores_surface onto the background image at the desired position
+                    screen.blit(topScores_surface, (x_position, y_position))
+
+                    
+
+                    if reset_button.draw():
+                        reset_game_stats()
+
+                    exitButton = button(250, 250, exit_img, 2.5)
+                    if exitButton.draw():
+                        pygame.quit()
+
+                    pygame.display.update()
+
+
 
 
     
