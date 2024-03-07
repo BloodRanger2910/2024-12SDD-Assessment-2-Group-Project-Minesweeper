@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 import os
+import sys
 
 mixer=pygame.mixer
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -67,7 +68,21 @@ win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 panel_img = pygame.image.load("images/panel_bg.png").convert_alpha()
 eula_img = pygame.image.load("images/eula.png").convert_alpha()
+reset_button_img = pygame.image.load("images/reset_button.png").convert_alpha()
+howto_img = pygame.image.load("images/howto.png").convert_alpha()
+ 
+# Get the image rect for positioning and collision detection
+reset_button_rect = reset_button_img.get_rect()
 
+# Set the position of the reset button
+reset_button_rect.x = 100  # Replace x with the desired x-coordinate
+reset_button_rect.y = 100  # Replace y with the desired y-coordinate
+
+# Create a transparent rect object to overlap the image
+transparent_rect = pygame.Rect(reset_button_rect)
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 difficultyButtons = {} 
 for x in file_names.values():
@@ -780,10 +795,10 @@ while run:
                     screen.blit(win_screen_img, (0, 0))
 
                     # Display difficulty and time taken
-                    difficulty_text = munro_font.render("Difficulty: Beginner", True, (255, 255, 255))
+                    difficulty_text = munro_font.render("Difficulty: " + difficulty, True, (255, 255, 255))
                     screen.blit(difficulty_text, (menuWidth // 2 - difficulty_text.get_width() // 2, 200))
 
-                    time_text = munro_font.render("Time Taken: 00:00", True, (255, 255, 255))
+                    time_text = munro_font.render("Time Taken: "+ str(time), True, (255, 255, 255))
                     screen.blit(time_text, (menuWidth // 2 - time_text.get_width() // 2, 250))
                     win_displayed = True
 
@@ -793,20 +808,31 @@ while run:
                     print("gameWon:", gameWon)
                     print("Win displayed:", win_displayed)
 
-                    pygame.time.delay(1000)
-                    reset_game_stats()
-                    pass
+                    reset_button = button(300, 250, reset_button_img, 1)
+                    screen.blit(reset_button_img, (300, 250))
+                    pygame.display.update()
+                    # Check if the mouse is over the reset button
+                    while gameWon and win_displayed == False:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                sys.exit()
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                # Set the x, y positions of the mouse click
+                                x, y = event.pos
+                                if reset_button_img.get_rect(topleft=(300, 250)).collidepoint(x, y):
+                                    reset_game_stats()
+                    
+
 
     if gameOver and loss_displayed == False:
-                    #put endgame code here if loss
-                    loss_displayed = True
+                    
                     print("You Lose!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
                     # Display the loss screen image
                     screen.blit(loss_screen_img, (0, 0))
  
                     # Display difficulty
-                    difficulty_text = munro_font.render("Difficulty: Beginner", True, (255, 255, 255))
+                    difficulty_text = munro_font.render("Difficulty: " + difficulty, True, (255, 255, 255))
                     screen.blit(difficulty_text, (menuWidth // 2 - difficulty_text.get_width() // 2, 200))
                     #loss text
                     loss_text = munro_font.render("You Lose!", True, (255, 255, 255))
@@ -815,9 +841,21 @@ while run:
                     print("gameOver:", gameOver)
                     print("Loss displayed:", loss_displayed)
  
-                    pygame.time.delay(1000)
-                    reset_game_stats()
-                    pass
+                    reset_button = button(300, 250, reset_button_img, 1)
+                    screen.blit(reset_button_img, (300, 250))
+                    pygame.display.update()
+                    # Check if the mouse is over the reset button
+                    while gameOver and loss_displayed == False:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                sys.exit()
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                # Set the x, y positions of the mouse click
+                                x, y = event.pos
+                                if reset_button_img.get_rect(topleft=(300, 250)).collidepoint(x, y):
+                                    reset_game_stats()
+                    
+
 
     
     clock.tick(refreshRate)
