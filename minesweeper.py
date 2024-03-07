@@ -752,7 +752,7 @@ while run:
             drawField() 
             drawTopPanel() 
 
-        if pause:
+        if pause and loadGame and not gameOver and not gameWon:
             drawPause()
 
         if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
@@ -771,7 +771,8 @@ while run:
             drawTopPanel() 
             
 
-    if gameWon and not displayEndGame and win_displayed == False:
+    if gameWon and win_displayed == False:
+                    #put the endgame code here if win
                     win_displayed = True
                     print("You Win!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
@@ -797,6 +798,7 @@ while run:
                     pass
 
     if gameOver and loss_displayed == False:
+                    #put endgame code here if loss
                     loss_displayed = True
                     print("You Lose!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
