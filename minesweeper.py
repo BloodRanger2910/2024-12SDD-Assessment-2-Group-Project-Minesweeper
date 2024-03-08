@@ -25,6 +25,7 @@ eula_clicked = False
 no_of_clicks_eula = 0
 events = []
 
+
 #load font
 munro_font = pygame.font.Font("munro.ttf", 36)
 
@@ -175,6 +176,7 @@ firstClickDone = False
 loss_displayed = False
 win_displayed = False
 game_state = "playing"
+ticks = 0
 
 
 def insertion_sort(arr):
@@ -255,11 +257,15 @@ class button(): #general button class
                 self.clicked = False
 
         return action
-
+    
 def display_win_screen():
-                    global difficulty, colors, difficulty_color
+                    global difficulty, colors, difficulty_color, ticks
                     print("You Win!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    duration = 40
+                    scale = 200/duration
+                    scale2 = 100/duration
+                    scale3 = 150/duration
                     # Display the win screen image
                     screen.fill((0, 0, 0))
                     screen.blit(win_screen_img, (0, 0))
@@ -275,15 +281,31 @@ def display_win_screen():
                     elif difficulty == 'master':
                         difficulty_color = colors['master']
 
-                    # Display difficulty and time taken
-                    difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
-                    screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
+                                        
+                    if ticks < duration:
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        win_text = munro_font.render("You Win!", True, (144, 238, 144))
+                        time_text = munro_font.render("Time Taken: "+ str(time) +" seconds", True, (255, 255, 255))
+                        screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
+                        screen.blit(win_text, (300 - win_text.get_width() // 2, 100 - scale2*(duration - ticks)))
+                        screen.blit(time_text, (300 - time_text.get_width() // 2, 150 - scale3*(duration - ticks)))
+                        ticks = ticks + 1
 
-                    time_text = munro_font.render("Time Taken: "+ str(time), True, (255, 255, 255))
-                    screen.blit(time_text, (300 - time_text.get_width() // 2, 150))
+                    else:
+                        # Display difficulty
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
+                        
+                        #time taken
+                        time_text = munro_font.render("Time Taken: "+ str(time), True, (255, 255, 255))
+                        screen.blit(time_text, (300 - time_text.get_width() // 2, 150))
+                        
+                        #loss text
+                        win_text = munro_font.render("You Win!", True, (144, 238, 144))
+                        screen.blit(win_text, (300 - win_text.get_width() // 2, 100))
 
-                    win_text = munro_font.render("You Win!", True, (144, 238, 144))
-                    screen.blit(win_text, (300 - win_text.get_width() // 2, 100))
+
+
                     
                     print("gameWon:", gameWon)
                     print("Win displayed:", win_displayed)
@@ -319,9 +341,13 @@ def display_win_screen():
                     pygame.display.flip()
 
 def display_loss_screen():
-                    global difficulty, colors, difficulty_color
+                    global difficulty, colors, difficulty_color ,ticks
                     print("You Lose!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    
+                    duration = 40
+                    scale = 200/duration
+                    scale2 = 100/duration
                     # Display the loss screen image
                     screen.blit(loss_screen_img, (0, 0))
 
@@ -336,12 +362,25 @@ def display_loss_screen():
                     elif difficulty == 'master':
                         difficulty_color = colors['master']
  
-                    # Display difficulty
-                    difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
-                    screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
-                    #loss text
-                    loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
-                    screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100))
+                    
+                    if ticks < duration:
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
+                        screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
+                        screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100 - scale2*(duration - ticks)))
+                        ticks = ticks + 1
+
+                    else:
+                        # Display difficulty
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
+
+                        #loss text
+                        loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
+                        screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100))
+
+                    
+
                     print("gameOver:", gameOver)
                     print("Loss displayed:", loss_displayed)
                     topScores = get_top_scores(difficulty)
@@ -736,7 +775,7 @@ def checkWinCondition():
         
 def reset_game_stats():
     global menuHeight, menuWidth,width,height,gameWon,time,rows,cols,mines,startGame,loadDifficultySelect,loadGame, minefield,playerField,gameOver
-    global flagsPlaced, displayEndGame, firstClickDone, screen, win_displayed, loss_displayed, game_state
+    global flagsPlaced, displayEndGame, firstClickDone, screen, win_displayed, loss_displayed, game_state, ticks
     
     menuHeight = 432
     menuWidth = 800
@@ -758,6 +797,7 @@ def reset_game_stats():
     loss_displayed = False
     win_displayed = False
     game_state = "playing"
+    ticks = 0
     print('reset!')
     pass
 
@@ -932,6 +972,7 @@ while run:
     if gameOver == True:
                     
         display_loss_screen()
+        
         
     
     
