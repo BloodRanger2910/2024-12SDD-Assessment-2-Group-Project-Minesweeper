@@ -242,6 +242,7 @@ def save_highscore(time, highscore_file):
         for score in highscores:
             file.write(f"{score}\n")
             
+
 class button(): #general button class
     def __init__(self, x, y, image, scale):
         width = image.get_width()
@@ -321,8 +322,6 @@ def display_win_screen():
                         win_text = munro_font.render("You Win!", True, (144, 238, 144))
                         screen.blit(win_text, (300 - win_text.get_width() // 2, 100))
 
-                    print("gameWon:", gameWon)
-                    print("Win displayed:", win_displayed)
                     topScores = get_top_scores(difficulty)
 
                     x_position = 575
@@ -761,6 +760,7 @@ def checkWinCondition():
         gameWon = True
         displayEndGame = True
         screen = pygame.display.set_mode((menuWidth, menuHeight))
+        save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}.txt')	
 
 #checks if the amount of revealed squares are the same as the amount of non mine squares
         
@@ -840,7 +840,7 @@ def drawMenu():
     drawBackground()
     drawLogo()
 
-    if not display_highscore:
+    if not display_highscore and not display_credits and not display_howto:
             if startButton.draw() == True: #check if clicked -> toggles game start and stops displaying start and exit buttons
                 print('starting game')
                 startGame = True
@@ -848,26 +848,28 @@ def drawMenu():
             if exitButton.draw() == True:
                 run = False
 
-    if highScoreButton.draw() == True:
-        print('high scores')
-        display_highscore = True
+            if highScoreButton.draw() == True:
+                print('high scores')
+                display_highscore = True
 
-    if display_highscore:
-        displayHighScores()
-        
-    if creditsButton.draw() == True:
-        print('credits')
-        display_credits = True
-    
-    if display_credits:
-        displayCredits()
-    
-    if howToButton.draw() == True:
-        print("how to play")
-        display_howto = True
+
+            if creditsButton.draw() == True:
+                print('credits')
+                display_credits = True
+
+
+            if howToButton.draw() == True:
+                print("how to play")
+                display_howto = True
     
     if display_howto:
         displayHowTo()
+
+    if display_credits:
+        displayCredits()
+
+    if display_highscore:
+        displayHighScores()
         
     if soundButton.draw():
         if mute == False:
@@ -958,10 +960,6 @@ while run:
         
         if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
             checkWinCondition()
-
-        if gameWon and not displayEndGame: #if player wins 
-            save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}')	
-            displayEndGame = True
 
     if gameWon == True:
             display_win_screen()
