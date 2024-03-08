@@ -24,6 +24,7 @@ file_names = {'beginner':'beginner', 'intermediate':'intermediate', 'advanced': 
 eula_clicked = False
 no_of_clicks_eula = 0
 events = []
+colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
 
 
 #load font
@@ -112,8 +113,7 @@ def drawLogo(): #draws the minesweeper logo on the starting screen
     screen.blit(logoImage, (100,30))
     
 def displayHighScores():
-    global file_names, display_highscore
-    colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
+    global file_names, display_highscore, colors
 
     frameImage = pygame.transform.scale(highScore_frame, (highScore_frame.get_width() *3, highScore_frame.get_height()*3))
     screen.blit(frameImage, (270,20))
@@ -259,27 +259,21 @@ class button(): #general button class
         return action
     
 def display_win_screen():
-                    global difficulty, colors, difficulty_color, ticks
-                    print("You Win!")
-                    screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    global difficulty, colors, difficulty_color, ticks, run
+
+
                     duration = 40
                     scale = 250/duration
                     scale2 = 150/duration
                     scale3 = 200/duration
+                    drawBackground()
                     # Display the win screen image
-                    screen.fill((0, 0, 0))
+                    
                     screen.blit(win_screen_img, (0, 0))
 
-                    colors = {'beginner': (144, 238, 144), 'intermediate': (0, 255, 255), 'advanced': (255, 212, 47), 'master': (128, 0, 0)}
+                    
 
-                    if difficulty == 'beginner':
-                        difficulty_color = colors['beginner']
-                    elif difficulty == 'intermediate':
-                        difficulty_color = colors['intermediate']
-                    elif difficulty == 'advanced':
-                        difficulty_color = colors['advanced']
-                    elif difficulty == 'master':
-                        difficulty_color = colors['master']
+                    difficulty_color = colors[difficulty]
 
                                         
                     if ticks < duration:
@@ -336,31 +330,21 @@ def display_win_screen():
 
                     exitButton = button(100, 250, exit_img, 2.5)
                     if exitButton.draw():
-                        pygame.quit()
+                        run = False
                     
-                    pygame.display.flip()
 
 def display_loss_screen():
-                    global difficulty, colors, difficulty_color ,ticks
-                    print("You Lose!")
-                    screen = pygame.display.set_mode((menuWidth, menuHeight))
+                    global difficulty, colors, difficulty_color ,ticks, run
+                    #print("You Lose!")
                     
                     duration = 40
                     scale = 250/duration
                     scale2 = 150/duration
                     # Display the loss screen image
+                    drawBackground()
                     screen.blit(loss_screen_img, (0, 0))
 
-                    colors = {'beginner': (144, 238, 144), 'intermediate': (0, 255, 255), 'advanced': (255, 212, 47), 'master': (128, 0, 0)}
-
-                    if difficulty == 'beginner':
-                        difficulty_color = colors['beginner']
-                    elif difficulty == 'intermediate':
-                        difficulty_color = colors['intermediate']
-                    elif difficulty == 'advanced':
-                        difficulty_color = colors['advanced']
-                    elif difficulty == 'master':
-                        difficulty_color = colors['master']
+                    difficulty_color = colors[difficulty]
  
                     
                     if ticks < duration:
@@ -381,8 +365,6 @@ def display_loss_screen():
 
                     
 
-                    print("gameOver:", gameOver)
-                    print("Loss displayed:", loss_displayed)
                     topScores = get_top_scores(difficulty)
 
                     x_position = 575
@@ -395,8 +377,8 @@ def display_loss_screen():
                     topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                     font = pygame.font.SysFont(None, 36)  # Choose a font and size
                     for i, score in enumerate(topScores):
-                        text_surface = font.render( score, True, (255, 212, 47))  # Render the text
-                        topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
+                       text_surface = font.render( score, True, (255, 212, 47))  # Render the text
+                       topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
 
                     
                     # Blit the topScores_surface onto the background image at the desired position
@@ -407,9 +389,9 @@ def display_loss_screen():
 
                     exitButton = button(100, 250, exit_img, 2.5)
                     if exitButton.draw():
-                        pygame.quit()
+                        run = False
 
-                    pygame.display.update()
+
                     # Check if animation is complete
 
 
@@ -705,6 +687,7 @@ def leftClick(row,col): #clicks square to reveal
         loadGame = False
         explosion_sfx.play()
         revealGrid()
+        screen = pygame.display.set_mode((menuWidth, menuHeight))
 
     else:
         if playerField[row][col] == 0:
@@ -765,12 +748,15 @@ def revealGrid():
     return
 
 def checkWinCondition():
+    global screen
     global playerField, rows, cols, mines, gameWon, displayEndGame
     revealed_count = sum(row.count(1) for row in playerField)
     total_squares = rows * cols
     if revealed_count == total_squares - mines:
         gameWon = True
         displayEndGame = True
+        screen = pygame.display.set_mode((menuWidth, menuHeight))
+
 #checks if the amount of revealed squares are the same as the amount of non mine squares
         
 def reset_game_stats():
@@ -947,9 +933,9 @@ while run:
         if pause and loadGame and not gameOver and not gameWon:
             drawPause()
 
-        if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
-            drawTopPanel()
-            drawField()
+        #if gameOver and not displayEndGame: #clearing the field if player steps on a bomb
+        #    drawTopPanel()
+        #    drawField()
             
         
         if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
@@ -959,26 +945,24 @@ while run:
             save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}')	
             displayEndGame = True
         
-        if displayEndGame:
-            drawTopPanel() 
             
 
 
     if gameWon == True:
-
-        display_win_screen()
+            
+            display_win_screen()
 
 
     if gameOver == True:
-                    
-        display_loss_screen()
+            display_loss_screen()
+    else:
+            print('not')
         
         
     
     
     clock.tick(refreshRate)
     events = pygame.event.get()
-    print(events)
     
     for event in events:
         mouse = pygame.mouse.get_pressed()
