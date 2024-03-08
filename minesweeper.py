@@ -17,6 +17,8 @@ width = 0
 height = 0
 gameWon = False
 display_highscore = False
+display_credits = False
+display_howto = False
 time = 0
 time_in_menu = 0
 eula_agreement = False
@@ -26,10 +28,8 @@ no_of_clicks_eula = 0
 events = []
 colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
 
-
 #load font
 munro_font = pygame.font.Font("munro.ttf", 36)
-
 
 highscoredata = []
 
@@ -46,7 +46,6 @@ grass_sfx = pygame.mixer.Sound('sounds/grass sfx.mp3')
 grass_sfx.set_volume(3)
 explosion_sfx = pygame.mixer.Sound('sounds/explosion sfx.mp3')
 flag_sfx = pygame.mixer.Sound('sounds/flag sfx.mp3')
-
 
 #loading image assets
 button_img = pygame.image.load('images/start_btn.png').convert_alpha()
@@ -75,7 +74,9 @@ reset_button_img = pygame.image.load("images/reset_button.png").convert_alpha()
 howto_img = pygame.image.load("images/howto.png").convert_alpha()
 background_image = pygame.image.load("images/highscoreDisplay.png").convert_alpha()
 play_img = pygame.image.load("images/play_btn.png").convert_alpha()
-
+howtoplay_img = pygame.image.load("images/howtoplay.png").convert_alpha()
+creditsbtn_img = pygame.image.load("images/creditsbtn.png").convert_alpha()
+credits_img = pygame.image.load("images/credits.png").convert_alpha()
 
 background_width, background_height = background_image.get_size()  # Get image dimensions
 background_rect = background_image.get_rect(x=500, y=75) 
@@ -142,6 +143,32 @@ def displayHighScores():
         pygame.time.delay(30)
         display_highscore = False
         pygame.time.delay(30)
+
+def displayCredits():
+    global display_credits
+    
+    frameImage = pygame.transform.scale(credits_img, (credits_img.get_width() *1.6, credits_img.get_height()*1.6))
+    screen.blit(frameImage, (100,20))
+    
+    closeButton = button(378,370, close_img, 1)
+    
+    if closeButton.draw():
+        pygame.time.delay(30)
+        display_credits = False
+        pygame.time.delay(30)
+        
+def displayHowTo():
+    global display_howto
+    
+    frameImage = pygame.transform.scale(howto_img, (howto_img.get_width() *1, howto_img.get_height()*1))
+    screen.blit(frameImage, (50,20))
+    
+    closeButton = button(378,340, close_img, 1)
+    
+    if closeButton.draw():
+        pygame.time.delay(30)
+        display_howto = False
+        pygame.time.delay(30)    
 
 def get_top_scores(difficulty):
     topScores = []
@@ -271,10 +298,7 @@ def display_win_screen():
                     
                     screen.blit(win_screen_img, (0, 0))
 
-                    
-
                     difficulty_color = colors[difficulty]
-
                                         
                     if ticks < duration:
                         difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
@@ -298,9 +322,6 @@ def display_win_screen():
                         win_text = munro_font.render("You Win!", True, (144, 238, 144))
                         screen.blit(win_text, (300 - win_text.get_width() // 2, 100))
 
-
-
-                    
                     print("gameWon:", gameWon)
                     print("Win displayed:", win_displayed)
                     topScores = get_top_scores(difficulty)
@@ -322,8 +343,6 @@ def display_win_screen():
                     screen.blit(topScores_surface, (x_position, y_position))
 
                     reset_button = button(300, 250, reset_button_img, 2.5)
-        
-                    
                 
                     if reset_button.draw():
                         reset_game_stats()
@@ -345,7 +364,6 @@ def display_loss_screen():
                     screen.blit(loss_screen_img, (0, 0))
 
                     difficulty_color = colors[difficulty]
- 
                     
                     if ticks < duration:
                         difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
@@ -362,8 +380,6 @@ def display_loss_screen():
                         #loss text
                         loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
                         screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100))
-
-                    
 
                     topScores = get_top_scores(difficulty)
 
@@ -390,7 +406,6 @@ def display_loss_screen():
                     exitButton = button(100, 250, exit_img, 2.5)
                     if exitButton.draw():
                         run = False
-
 
                     # Check if animation is complete
 
@@ -527,8 +542,6 @@ def drawField(): #render the board
                     else:
                         box = square(x_cord, y_cord+100,lightgreen_tile)
                 box.draw()
-
-
             
             if playerField[y][x] == 2: #if square is flagged
                 y_cord = y*30
@@ -538,8 +551,6 @@ def drawField(): #render the board
                 flag.draw()
 
     pass
-    #perhaps make it so that when player clicks, the box dissapears and reveals number below it?
-
 
 def drawTopPanel():
     global clock_img
@@ -552,8 +563,6 @@ def drawTopPanel():
     background_rect.topleft = (0,0)
     screen.blit(background,background_rect)
 
-
-    
     timeText = font.render(str(time), True, (0,0,0))
     textRect = timeText.get_rect()
     textRect.center = (width/10 + 40, 50)
@@ -595,7 +604,6 @@ def drawTopPanel():
             flag_sfx.set_volume(1)
             pygame.time.delay(120)
 
-
 def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
     neighbours = []
 
@@ -618,8 +626,6 @@ def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a
         neighbours.append((row+1,col+1))
 
     return neighbours
-
-
 
 def generateGrid(rows,cols,mines):
     field = [[0 for _ in range(cols)] for _ in range(rows)]
@@ -809,8 +815,6 @@ def drawEULA(): #work in progrss
         eula_agreement = True
 
 
-
-
 test_win_button = TestWinButton(50, 50, 200, 50, "Test Win")
 
 #main game loop 
@@ -821,10 +825,13 @@ pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 reveal_all_button = button(0, 0, button_img, 1)
 
 def drawMenu():
-    global startGame, run, display_highscore,mute
-    startButton = button(310, 140, button_img, 2.8)
-    exitButton = button(319, 330, exit_img, 2.5)
-    highScoreButton = button(317,230, highScore_image,2.6)
+    global startGame, run, display_highscore, mute, display_credits, display_howto
+    exitButton = button(345, 350, exit_img, 2)
+    startButton = button(230, 160, button_img, 2.5)
+    howToButton = button(230, 260 , howtoplay_img, 2.5)
+    highScoreButton = button(430, 160, highScore_image, 2.5)
+    creditsButton = button(430, 260, creditsbtn_img, 2.5)
+
 
     if mute:
         soundButton = button(740, 385, sound_off_img, 0.8)
@@ -848,7 +855,21 @@ def drawMenu():
 
     if display_highscore:
         displayHighScores()
-
+        
+    if creditsButton.draw() == True:
+        print('credits')
+        display_credits = True
+    
+    if display_credits:
+        displayCredits()
+    
+    if howToButton.draw() == True:
+        print("how to play")
+        display_howto = True
+    
+    if display_howto:
+        displayHowTo()
+        
     if soundButton.draw():
         if mute == False:
             mute = True
@@ -903,8 +924,6 @@ def drawDifficultySelect():
 
     pass
 
- 
-
 
 
 while run:
@@ -944,22 +963,12 @@ while run:
         if gameWon and not displayEndGame: #if player wins 
             save_highscore(time,f'Highscores/highscore_{file_names[difficulty]}')	
             displayEndGame = True
-        
-            
-
 
     if gameWon == True:
-            
             display_win_screen()
-
 
     if gameOver == True:
             display_loss_screen()
-    else:
-            print('not')
-        
-        
-    
     
     clock.tick(refreshRate)
     events = pygame.event.get()
@@ -1008,7 +1017,6 @@ while run:
                     break  # Exit the nested event loop as well
             if not run:
                 break  # Exit the main event loop if run is False
-
 
     pygame.display.update()
 
