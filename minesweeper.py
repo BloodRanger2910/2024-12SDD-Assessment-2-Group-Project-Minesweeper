@@ -263,9 +263,9 @@ def display_win_screen():
                     print("You Win!")
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
                     duration = 40
-                    scale = 200/duration
-                    scale2 = 100/duration
-                    scale3 = 150/duration
+                    scale = 250/duration
+                    scale2 = 150/duration
+                    scale3 = 200/duration
                     # Display the win screen image
                     screen.fill((0, 0, 0))
                     screen.blit(win_screen_img, (0, 0))
@@ -346,8 +346,8 @@ def display_loss_screen():
                     screen = pygame.display.set_mode((menuWidth, menuHeight))
                     
                     duration = 40
-                    scale = 200/duration
-                    scale2 = 100/duration
+                    scale = 250/duration
+                    scale2 = 150/duration
                     # Display the loss screen image
                     screen.blit(loss_screen_img, (0, 0))
 
