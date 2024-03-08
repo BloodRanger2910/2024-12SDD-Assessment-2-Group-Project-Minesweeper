@@ -48,9 +48,9 @@ explosion_sfx = pygame.mixer.Sound('sounds/explosion sfx.mp3')
 flag_sfx = pygame.mixer.Sound('sounds/flag sfx.mp3')
 
 #loading image assets
-button_img = pygame.image.load('images/start_btn.png').convert_alpha()
-exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
-resume_img = pygame.image.load('images/resume_btn.png').convert_alpha() #if not work, rename to resume_button
+startbtn_img = pygame.image.load('images/start_btn.png').convert_alpha()
+exitbtn_img = pygame.image.load('images/exit_btn.png').convert_alpha()
+resumebtn_img = pygame.image.load('images/resume_btn.png').convert_alpha() #if not work, rename to resume_button
 menu_img = pygame.image.load('images/menu_btn.png').convert_alpha()
 mine_img = pygame.image.load('images/landmine.png').convert_alpha()
 clock_img = pygame.image.load('images/clock.png').convert_alpha()
@@ -69,12 +69,11 @@ win_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 loss_screen_img = pygame.image.load("images/SussyBaka.png").convert_alpha()
 panel_img = pygame.image.load("images/panel_bg.png").convert_alpha()
 eula_img = pygame.image.load("images/eula.png").convert_alpha()
-howto_img = pygame.image.load("images/howto.png").convert_alpha()
-reset_button_img = pygame.image.load("images/reset_button.png").convert_alpha()
-howto_img = pygame.image.load("images/howto.png").convert_alpha()
+howtoplay_img = pygame.image.load("images/howto.png").convert_alpha()
+resetbtn_img = pygame.image.load("images/reset_button.png").convert_alpha()
 background_image = pygame.image.load("images/highscoreDisplay.png").convert_alpha()
-play_img = pygame.image.load("images/play_btn.png").convert_alpha()
-howtoplay_img = pygame.image.load("images/howtoplay.png").convert_alpha()
+playbtn_img = pygame.image.load("images/play_btn.png").convert_alpha()
+howtoplaybtn_img = pygame.image.load("images/howtoplay.png").convert_alpha()
 creditsbtn_img = pygame.image.load("images/creditsbtn.png").convert_alpha()
 credits_img = pygame.image.load("images/credits.png").convert_alpha()
 
@@ -160,7 +159,7 @@ def displayCredits():
 def displayHowTo():
     global display_howto
     
-    frameImage = pygame.transform.scale(howto_img, (howto_img.get_width() *1, howto_img.get_height()*1))
+    frameImage = pygame.transform.scale(howtoplay_img, (howtoplay_img.get_width() *1, howtoplay_img.get_height()*1))
     screen.blit(frameImage, (50,20))
     
     closeButton = button(378,340, close_img, 1)
@@ -329,7 +328,7 @@ def display_win_screen():
                     x_position = 575
                     y_position = 150
  
-                    reset_button = button(450, 250, reset_button_img, 2.5)
+                    reset_button = button(450, 250, resetbtn_img, 2.5)
                     screen.blit(background_image, background_rect)
                     topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
                     alpha_value = 0  
@@ -342,12 +341,12 @@ def display_win_screen():
                     # Blit the topScores_surface onto the background image at the desired position
                     screen.blit(topScores_surface, (x_position, y_position))
 
-                    reset_button = button(300, 250, reset_button_img, 2.5)
+                    reset_button = button(300, 250, resetbtn_img, 2.5)
                 
                     if reset_button.draw():
                         reset_game_stats()
 
-                    exitButton = button(100, 250, exit_img, 2.5)
+                    exitButton = button(100, 250, exitbtn_img, 2.5)
                     if exitButton.draw():
                         run = False
                     
@@ -386,7 +385,7 @@ def display_loss_screen():
                     x_position = 575
                     y_position = 150
  
-                    reset_button = button(300, 250, reset_button_img, 2.5)
+                    reset_button = button(300, 250, resetbtn_img, 2.5)
                     screen.blit(background_image, background_rect)
                     topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
                     alpha_value = 0  
@@ -403,7 +402,7 @@ def display_loss_screen():
                     if reset_button.draw():
                         reset_game_stats()
 
-                    exitButton = button(100, 250, exit_img, 2.5)
+                    exitButton = button(100, 250, exitbtn_img, 2.5)
                     if exitButton.draw():
                         run = False
 
@@ -487,7 +486,7 @@ def drawPause():
     pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, width, height])
     screen.blit(surface, (0,0))
 
-    resumeButton = button(width/2 - resume_img.get_width()*1.25, height/2 - 20, resume_img, 2.5)
+    resumeButton = button(width/2 - resumebtn_img.get_width()*1.25, height/2 - 20, resumebtn_img, 2.5)
     if resumeButton.draw():
         pause = False
 
@@ -808,7 +807,7 @@ def drawEULA(): #work in progrss
     eula_rect.center = (400,195)
     screen.blit(eula_img, eula_rect)
 
-    exitBtn = button(335,300,play_img,2)
+    exitBtn = button(335,300,playbtn_img,2)
 
     if exitBtn.draw() and no_of_clicks_eula < 1:
         pygame.time.wait(100)
@@ -822,13 +821,13 @@ clock = pygame.time.Clock()
 run = True
 pygame.time.set_timer(pygame.USEREVENT, 1000) #initalise clock
 
-reveal_all_button = button(0, 0, button_img, 1)
+reveal_all_button = button(0, 0, startbtn_img, 1)
 
 def drawMenu():
     global startGame, run, display_highscore, mute, display_credits, display_howto
-    exitButton = button(345, 350, exit_img, 2)
-    startButton = button(230, 160, button_img, 2.5)
-    howToButton = button(230, 260 , howtoplay_img, 2.5)
+    exitButton = button(345, 350, exitbtn_img, 2)
+    startButton = button(230, 160, startbtn_img, 2.5)
+    howToButton = button(230, 260 , howtoplaybtn_img, 2.5)
     highScoreButton = button(430, 160, highScore_image, 2.5)
     creditsButton = button(430, 260, creditsbtn_img, 2.5)
 
