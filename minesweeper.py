@@ -296,6 +296,11 @@ def display_win_screen():
                     scale = 250/duration
                     scale2 = 150/duration
                     scale3 = 200/duration
+                    scale4 = 300/duration
+                    scale5 = 300/duration
+                    x_position = 575
+
+                    topScores = get_top_scores(difficulty)
                     drawBackground()
                     # Display the win screen image
                     
@@ -310,6 +315,20 @@ def display_win_screen():
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
                         screen.blit(win_text, (300 - win_text.get_width() // 2, 100 - scale2*(duration - ticks)))
                         screen.blit(time_text, (300 - time_text.get_width() // 2, 150 - scale3*(duration - ticks)))
+                        exitButton = button(100, 250 - scale4*(duration - ticks), exitbtn_img, 2.5)
+                        reset_button = button(300, 250 - scale5*(duration - ticks), resetbtn_img, 2.5)
+
+                        topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                        alpha_value = 0
+                        topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                        font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                        for i, score in enumerate(topScores):
+                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 36 - scale * (duration - ticks)))  # Blit the text onto the surface
+                            
+
+                        y_position = 150 - scale * (duration - ticks)  # Adjust y_position based on ticks
+                        background_rect = background_image.get_rect(x=500, y=75 - scale*(duration - ticks)) # Adjust 
                         ticks = ticks + 1
 
                     else:
@@ -318,37 +337,39 @@ def display_win_screen():
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
                         
                         #time taken
-                        time_text = munro_font.render("Time Taken: "+ str(time), True, (255, 255, 255))
+                        time_text = munro_font.render("Time Taken: "+ str(time) +" seconds", True, (255, 255, 255))
                         screen.blit(time_text, (300 - time_text.get_width() // 2, 150))
                         
                         #loss text
                         win_text = munro_font.render("You Win!", True, (144, 238, 144))
                         screen.blit(win_text, (300 - win_text.get_width() // 2, 100))
+                       
+                        #exit button
+                        exitButton = button(100, 250, exitbtn_img, 2.5)
 
-                    topScores = get_top_scores(difficulty)
+                        #reset button
+                        reset_button = button(300, 250, resetbtn_img, 2.5)
 
-                    x_position = 575
-                    y_position = 150
- 
-                    reset_button = button(450, 250, resetbtn_img, 2.5)
+                        #top score text
+                        topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                        alpha_value = 0
+                        topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                        font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                        for i, score in enumerate(topScores):
+                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
+
+                        y_position = 150
+                        background_rect = background_image.get_rect(x=500, y=75)
+
                     screen.blit(background_image, background_rect)
-                    topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-                    alpha_value = 0  
-                    topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
-                    font = pygame.font.SysFont(None, 36)  # Choose a font and size
-                    for i, score in enumerate(topScores):
-                        text_surface = font.render( score, True, (255, 212, 47))  # Render the text
-                        topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
-                    
                     # Blit the topScores_surface onto the background image at the desired position
                     screen.blit(topScores_surface, (x_position, y_position))
 
-                    reset_button = button(300, 250, resetbtn_img, 2.5)
-                
                     if reset_button.draw():
                         reset_game_stats()
 
-                    exitButton = button(100, 250, exitbtn_img, 2.5)
+                    
                     if exitButton.draw():
                         run = False
                     
@@ -360,6 +381,11 @@ def display_loss_screen():
                     duration = 40
                     scale = 250/duration
                     scale2 = 150/duration
+                    scale4 = 300/duration
+                    scale5 = 300/duration
+                    x_position = 575
+                     
+                    topScores = get_top_scores(difficulty)
                     # Display the loss screen image
                     drawBackground()
                     screen.blit(loss_screen_img, (0, 0))
@@ -371,6 +397,20 @@ def display_loss_screen():
                         loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
                         screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100 - scale2*(duration - ticks)))
+                        exitButton = button(100, 250 - scale4*(duration - ticks), exitbtn_img, 2.5)
+                        reset_button = button(300, 250 - scale5*(duration - ticks), resetbtn_img, 2.5)
+
+                        topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                        alpha_value = 0
+                        topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                        font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                        for i, score in enumerate(topScores):
+                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 36 - scale * (duration - ticks)))  # Blit the text onto the surface
+                            
+
+                        y_position = 150 - scale * (duration - ticks)  # Adjust y_position based on ticks
+                        background_rect = background_image.get_rect(x=500, y=75 - scale*(duration - ticks)) # Adjust 
                         ticks = ticks + 1
 
                     else:
@@ -382,33 +422,34 @@ def display_loss_screen():
                         loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
                         screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100))
 
-                    topScores = get_top_scores(difficulty)
+                        #exit button
+                        exitButton = button(100, 250, exitbtn_img, 2.5)
 
-                    x_position = 575
-                    y_position = 150
- 
-                    reset_button = button(300, 250, resetbtn_img, 2.5)
+                        #reset button
+                        reset_button = button(300, 250, resetbtn_img, 2.5)
+
+                        #top score text
+                        topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+                        alpha_value = 0
+                        topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
+                        font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                        for i, score in enumerate(topScores):
+                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
+
+                        y_position = 150
+                        background_rect = background_image.get_rect(x=500, y=75)
+
                     screen.blit(background_image, background_rect)
-                    topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-                    alpha_value = 0  
-                    topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
-                    font = pygame.font.SysFont(None, 36)  # Choose a font and size
-                    for i, score in enumerate(topScores):
-                       text_surface = font.render( score, True, (255, 212, 47))  # Render the text
-                       topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
-
-                    
                     # Blit the topScores_surface onto the background image at the desired position
                     screen.blit(topScores_surface, (x_position, y_position))
 
                     if reset_button.draw():
                         reset_game_stats()
 
-                    exitButton = button(100, 250, exitbtn_img, 2.5)
+                    
                     if exitButton.draw():
                         run = False
-
-                    # Check if animation is complete
 
 
 class TestWinButton: 
