@@ -32,7 +32,7 @@ revealCol = 0
 gridRevealed = False
 
 #load font
-munro_font = pygame.font.Font("munro.ttf", 36)
+munro_font = pygame.font.Font("Font/munro.ttf", 36)
 
 highscoredata = []
 
@@ -110,6 +110,7 @@ numbers = {} #loading numbers
 for i in range(1,9):
     numberPic = pygame.image.load(f'images/number {i}.png').convert_alpha()
     numbers[i] = numberPic
+
 
 def drawLogo(): #draws the minesweeper logo on the starting screen
     logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
@@ -196,7 +197,7 @@ minefield = None #stores the minefield (-1 for mine), pre laced with mine counts
 playerField = None #the field that the player sees, 0 for unrevealed, 1 for revealed, 2 for flagged
 gameOver = False #triggers when player steps on a mine
 game_over = False
-font = pygame.font.Font('munro.ttf', 30) 
+font = pygame.font.Font('Font/munro.ttf', 30) 
 textRect = None 
 flagsPlaced = 0
 displayEndGame = False
