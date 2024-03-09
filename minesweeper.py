@@ -435,9 +435,17 @@ class square(): #dimensions of a square will be 30x30
         self.image = pygame.transform.scale(self.imageAsset, (30, 30))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x,y)
+        self.x = x
+        self.y = y
 
     def draw(self):
+        pos = pygame.mouse.get_pos()
         screen.blit(self.image, (self.rect.x,self.rect.y))
+
+        if self.rect.collidepoint(pos):
+            surface = pygame.Surface((30, 30), pygame.SRCALPHA) 
+            pygame.draw.rect(surface, (255, 255, 255, 100), [0, 0, 30, 30])
+            screen.blit(surface, (self.x,self.y))
 
 def recordHighScore():
     global time
