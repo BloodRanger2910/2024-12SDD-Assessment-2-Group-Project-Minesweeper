@@ -1001,7 +1001,7 @@ while run:
                     if revealCol == cols:
                         revealRow += 1
                         revealCol = 0
-                    if revealRow > rows:
+                    if revealRow > rows-1:
                         gridRevealed = True
                         break
                 playerField[revealRow][revealCol] = 1
@@ -1015,7 +1015,7 @@ while run:
                 revealRow += 1
                 revealCol = 0
 
-            if revealRow > rows:
+            if revealRow > rows-1:
                 gridRevealed = True
                 print('ahsdbaiydb')
 
@@ -1023,7 +1023,6 @@ while run:
                 pygame.display.set_mode((menuWidth,menuHeight))
 
             pass
-
 
         if event.type == pygame.QUIT:
             run = False 
@@ -1033,6 +1032,10 @@ while run:
                     pause = False
                 else:
                     pause = True
+
+        if gameOver and mouse[0] and not gridRevealed: #skips revealing grid if click
+            gridRevealed = True
+            pygame.display.set_mode((menuWidth,menuHeight))
                 
         if loadGame == True and mouse[0] and not pause: #detect left click on grid
             mousePos = pygame.mouse.get_pos()
