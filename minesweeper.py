@@ -175,12 +175,11 @@ def displayHowTo():
 def get_top_scores(difficulty):
     topScores = []
     for n,scoreFile in enumerate(file_names.values()):
-        with open(f'Highscores/highscore_{difficulty}.txt','r') as file:
-            topScores = file.readlines(5)
-            if topScores == '':
-                topScores = '-'
-            else:
-                topScores = [x.strip() for x in topScores]
+        with open(f'Highscores/highscore_{scoreFile}.txt', "r") as file:
+            for line in file:
+                line = line.strip()
+                if line !=  '':
+                    topScores.append(line)
     return topScores
     
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -404,7 +403,7 @@ def display_loss_screen():
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
                         for i, score in enumerate(topScores):
-                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            text_surface = munro_font.render(f'{score}s', True, (255, 212, 47))  # Render the text
                             topScores_surface.blit(text_surface, (0, i * 25 - scale * (duration - ticks)))  # Blit the text onto the surface
                             
 
@@ -432,8 +431,9 @@ def display_loss_screen():
                         alpha_value = 0
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
+
                         for i, score in enumerate(topScores):
-                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            text_surface = munro_font.render(f'{score}s', True, (255, 212, 47))  # Render the text
                             topScores_surface.blit(text_surface, (0, i * 25))  # Blit the text onto the surface
 
                         y_position = 150
