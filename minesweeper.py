@@ -27,6 +27,9 @@ eula_clicked = False
 no_of_clicks_eula = 0
 events = []
 colors = {'beginner': (144,238,144), 'intermediate': (0,255,255), 'advanced': (255, 172, 28), 'master':(128, 0, 0)}
+revealRow = 0
+revealCol = 0
+gridRevealed = False
 
 #load font
 munro_font = pygame.font.Font("munro.ttf", 36)
@@ -670,6 +673,7 @@ def leftClick(row,col): #clicks square to reveal
     global loadGame
     global firstClickDone
     global minefield
+    global screen
 
     try:
         print('value', playerField[row][col])
@@ -689,9 +693,10 @@ def leftClick(row,col): #clicks square to reveal
         print('mine!')
         gameOver = True
         loadGame = False
+        pygame.time.set_timer(pygame.USEREVENT, 250) 
+        playerField[row][col] = 1
         explosion_sfx.play()
-        revealGrid()
-        screen = pygame.display.set_mode((menuWidth, menuHeight))
+        #screen = pygame.display.set_mode((menuWidth, menuHeight))
 
     else:
         if playerField[row][col] == 0:
@@ -766,7 +771,7 @@ def checkWinCondition():
         
 def reset_game_stats():
     global menuHeight, menuWidth,width,height,gameWon,time,rows,cols,mines,startGame,loadDifficultySelect,loadGame, minefield,playerField,gameOver
-    global flagsPlaced, displayEndGame, firstClickDone, screen, win_displayed, loss_displayed, game_state, ticks
+    global flagsPlaced, displayEndGame, firstClickDone, screen, win_displayed, loss_displayed, game_state, ticks, revealCol,revealRow,gridRevealed
     
     menuHeight = 432
     menuWidth = 800
@@ -789,7 +794,12 @@ def reset_game_stats():
     win_displayed = False
     game_state = "playing"
     ticks = 0
+    revealRow = 0
+    revealCol = 0
+    gridRevealed = 0
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
     print('reset!')
+
     pass
 
 def drawEULA(): #work in progrss
@@ -961,10 +971,17 @@ while run:
         if not gameWon and loadGame and not gameOver: #constantly checking if all squares have been revealed
             checkWinCondition()
 
+        #if gameWon or gameOver:
+        #    revealGrid()
+            
+        if gameOver and not gridRevealed:
+            drawField()
+            drawTopPanel()
+
     if gameWon == True:
             display_win_screen()
 
-    if gameOver == True:
+    if gameOver and gridRevealed:
             display_loss_screen()
     
     clock.tick(refreshRate)
@@ -975,6 +992,38 @@ while run:
 
         if event.type == pygame.USEREVENT and not gameOver and not gameWon and not pause:
             time += 1
+
+        if event.type == pygame.USEREVENT and gameOver and not gridRevealed:
+
+            try:
+                while playerField[revealRow][revealCol] == 1:
+                    revealCol += 1
+                    if revealCol == cols:
+                        revealRow += 1
+                        revealCol = 0
+                    if revealRow > rows:
+                        gridRevealed = True
+                        break
+                playerField[revealRow][revealCol] = 1
+            except:
+                pass
+            print('clearing',revealRow,revealCol)
+
+            revealCol += 1
+            if revealCol == cols:
+                revealRow += 1
+                revealCol = 0
+
+            if revealRow > rows:
+                gridRevealed = True
+                print('ahsdbaiydb')
+
+            if gridRevealed:
+                pygame.display.set_mode((menuWidth,menuHeight))
+
+            pass
+
+
         if event.type == pygame.QUIT:
             run = False 
         if event.type == pygame.KEYDOWN:
