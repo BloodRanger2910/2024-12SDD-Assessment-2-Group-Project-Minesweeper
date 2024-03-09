@@ -674,6 +674,7 @@ def leftClick(row,col): #clicks square to reveal
     global firstClickDone
     global minefield
     global screen
+    global events
 
     try:
         print('value', playerField[row][col])
@@ -696,6 +697,7 @@ def leftClick(row,col): #clicks square to reveal
         pygame.time.set_timer(pygame.USEREVENT, 250) 
         playerField[row][col] = 1
         explosion_sfx.play()
+        events = []
         #screen = pygame.display.set_mode((menuWidth, menuHeight))
 
     else:
@@ -796,7 +798,7 @@ def reset_game_stats():
     ticks = 0
     revealRow = 0
     revealCol = 0
-    gridRevealed = 0
+    gridRevealed = False
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     print('reset!')
 
@@ -994,7 +996,6 @@ while run:
             time += 1
 
         if event.type == pygame.USEREVENT and gameOver and not gridRevealed:
-
             try:
                 while playerField[revealRow][revealCol] == 1:
                     revealCol += 1
