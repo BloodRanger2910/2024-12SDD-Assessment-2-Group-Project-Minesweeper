@@ -180,7 +180,6 @@ def get_top_scores(difficulty):
             if topScores == '':
                 topScores = '-'
             else:
-                topScores += 's'
                 topScores = [x.strip() for x in topScores]
     return topScores
     
@@ -323,8 +322,8 @@ def display_win_screen():
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
                         for i, score in enumerate(topScores):
-                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
-                            topScores_surface.blit(text_surface, (0, i * 36 - scale * (duration - ticks)))  # Blit the text onto the surface
+                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 32 - scale * (duration - ticks)))  # Blit the text onto the surface
                             
 
                         y_position = 150 - scale * (duration - ticks)  # Adjust y_position based on ticks
@@ -356,7 +355,7 @@ def display_win_screen():
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
                         for i, score in enumerate(topScores):
-                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
+                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
                             topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
 
                         y_position = 150
@@ -405,8 +404,8 @@ def display_loss_screen():
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
                         for i, score in enumerate(topScores):
-                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
-                            topScores_surface.blit(text_surface, (0, i * 36 - scale * (duration - ticks)))  # Blit the text onto the surface
+                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 25 - scale * (duration - ticks)))  # Blit the text onto the surface
                             
 
                         y_position = 150 - scale * (duration - ticks)  # Adjust y_position based on ticks
@@ -434,8 +433,8 @@ def display_loss_screen():
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
                         font = pygame.font.SysFont(None, 36)  # Choose a font and size
                         for i, score in enumerate(topScores):
-                            text_surface = font.render(score, True, (255, 212, 47))  # Render the text
-                            topScores_surface.blit(text_surface, (0, i * 36))  # Blit the text onto the surface
+                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            topScores_surface.blit(text_surface, (0, i * 25))  # Blit the text onto the surface
 
                         y_position = 150
                         background_rect = background_image.get_rect(x=500, y=75)
