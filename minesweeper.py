@@ -1005,6 +1005,7 @@ while run:
                         gridRevealed = True
                         break
                 playerField[revealRow][revealCol] = 1
+                grass_sfx.play()
             except:
                 pass
             print('clearing',revealRow,revealCol)
