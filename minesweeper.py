@@ -907,6 +907,7 @@ def drawEULA(): #work in progrss
     global eula_agreement
     global eula_clicked
     global no_of_clicks_eula
+    global mute
 
 
     surface = pygame.Surface((menuWidth, menuHeight), pygame.SRCALPHA) 
@@ -923,6 +924,27 @@ def drawEULA(): #work in progrss
     if exitBtn.draw() and no_of_clicks_eula < 1:
         pygame.time.wait(100)
         eula_agreement = True
+
+    if mute:
+        soundButton = button(740, 385, sound_off_img, 0.8)
+    else:
+        soundButton = button(740, 385, sound_on_img, 0.8)
+
+    if soundButton.draw():
+        if mute == False:
+            mute = True
+            trapsong.set_volume(0)
+            grass_sfx.set_volume(0)
+            explosion_sfx.set_volume(0)
+            flag_sfx.set_volume(0)
+            pygame.time.delay(120)
+        else:
+            mute = False 
+            trapsong.set_volume(0.8)
+            grass_sfx.set_volume(3)
+            explosion_sfx.set_volume(1)
+            flag_sfx.set_volume(1)
+            pygame.time.delay(120)
 
 
 test_win_button = TestWinButton(50, 50, 200, 50, "Test Win")
