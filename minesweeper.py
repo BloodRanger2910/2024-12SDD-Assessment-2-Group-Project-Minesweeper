@@ -38,7 +38,7 @@ highscoredata = []
 
 screen = pygame.display.set_mode((menuWidth,menuHeight))
 
-pygame.display.set_caption('Minesweeper')
+pygame.display.set_caption('Jungle Recon')
 rows,cols,mines = 0,0,0
 
 #load sound assets
@@ -62,7 +62,7 @@ darkgreen_tile = pygame.image.load('images/GRASS+1.png').convert_alpha()
 lightgreen_tile = pygame.image.load('images/GRASS+2.png').convert_alpha()
 floortile_dark = pygame.image.load('images/floortile_dark.png').convert_alpha()
 floortile_light = pygame.image.load('images/floortile_light.png').convert_alpha()
-minesweeper_text = pygame.image.load('images/minesweeper text logo.png').convert_alpha()
+minesweeper_text = pygame.image.load('images/jungle-recon.png').convert_alpha()
 highScore_image = pygame.image.load('images/highscorebutton.png').convert_alpha()
 highScore_frame = pygame.image.load('images/frame.png').convert_alpha()
 close_img = pygame.image.load('images/close_button.png').convert_alpha()
@@ -113,8 +113,8 @@ for i in range(1,9):
 
 
 def drawLogo(): #draws the minesweeper logo on the starting screen
-    logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *0.5, minesweeper_text.get_height()*0.5))
-    screen.blit(logoImage, (100,30))
+    logoImage = pygame.transform.scale(minesweeper_text, (minesweeper_text.get_width() *1.5, minesweeper_text.get_height()*1.5))
+    screen.blit(logoImage, (55,30))
     
 def displayHighScores():
     global file_names, display_highscore, colors
