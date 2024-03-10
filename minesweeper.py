@@ -287,7 +287,7 @@ class button(): #general button class
         return action
     
 def display_win_screen():
-                    global difficulty, colors, difficulty_color, ticks, run
+                    global difficulty, colors, difficulty_color, ticks, run, mute
 
 
                     duration = 40
@@ -370,10 +370,31 @@ def display_win_screen():
                     
                     if exitButton.draw():
                         run = False
+
+                    if mute:
+                        soundButton = button(50, 50, sound_off_img, 0.7)
+                    else:
+                        soundButton = button(50,50, sound_on_img, 0.7)
+
+                    if soundButton.draw():
+                        if mute == False:
+                            mute = True
+                            trapsong.set_volume(0)
+                            grass_sfx.set_volume(0)
+                            explosion_sfx.set_volume(0)
+                            flag_sfx.set_volume(0)
+                            pygame.time.delay(120)
+                        else:
+                            mute = False 
+                            trapsong.set_volume(0.8)
+                            grass_sfx.set_volume(3)
+                            explosion_sfx.set_volume(1)
+                            flag_sfx.set_volume(1)
+                            pygame.time.delay(120)
                     
 
 def display_loss_screen():
-                    global difficulty, colors, difficulty_color ,ticks, run
+                    global difficulty, colors, difficulty_color ,ticks, run, mute
                     #print("You Lose!")
                     
                     duration = 40
@@ -449,6 +470,27 @@ def display_loss_screen():
                     
                     if exitButton.draw():
                         run = False
+
+                    if mute:
+                        soundButton = button(50,50, sound_off_img, 0.7)
+                    else:
+                        soundButton = button(50,50, sound_on_img, 0.7)
+
+                    if soundButton.draw():
+                        if mute == False:
+                            mute = True
+                            trapsong.set_volume(0)
+                            grass_sfx.set_volume(0)
+                            explosion_sfx.set_volume(0)
+                            flag_sfx.set_volume(0)
+                            pygame.time.delay(120)
+                        else:
+                            mute = False 
+                            trapsong.set_volume(0.8)
+                            grass_sfx.set_volume(3)
+                            explosion_sfx.set_volume(1)
+                            flag_sfx.set_volume(1)
+                            pygame.time.delay(120)
 
 
 class TestWinButton: 
