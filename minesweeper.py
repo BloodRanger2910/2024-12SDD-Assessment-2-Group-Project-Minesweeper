@@ -1097,7 +1097,7 @@ while run:
         if event.type == pygame.USEREVENT and gameOver and not gridRevealed:
 
             try:
-                while playerField[revealRow][revealCol] == 1:
+                while minefield[revealRow][revealCol] != -1:
                     revealCol += 1
                     if revealCol == cols:
                         revealRow += 1
@@ -1105,7 +1105,8 @@ while run:
                     if revealRow > rows-1:
                         gridRevealed = True
                         break
-                playerField[revealRow][revealCol] = 1
+                if minefield[revealRow][revealCol] == -1:
+                    playerField[revealRow][revealCol] = 1
                 grass_sfx.play()
             except:
                 pass
