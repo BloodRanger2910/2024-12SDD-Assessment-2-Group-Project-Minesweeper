@@ -175,12 +175,11 @@ def displayHowTo():
 
 def get_top_scores(difficulty):
     topScores = []
-    for n,scoreFile in enumerate(file_names.values()):
-        with open(f'Highscores/highscore_{scoreFile}.txt', "r") as file:
-            for line in file:
-                line = line.strip()
-                if line !=  '':
-                    topScores.append(line)
+    with open(f'Highscores/highscore_{difficulty}.txt', "r") as file:
+        for line in file:
+            line = line.strip()
+            if line !=  '':
+                topScores.append(line)
     return topScores
     
 def drawBackground(): #draws background on starting screen and difficulty select screen
@@ -308,7 +307,7 @@ def display_win_screen():
                     difficulty_color = colors[difficulty]
                                         
                     if ticks < duration:
-                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty.capitalize(), True, difficulty_color)
                         win_text = munro_font.render("You Win!", True, (144, 238, 144))
                         time_text = munro_font.render("Time Taken: "+ str(time) +" seconds", True, (255, 255, 255))
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
@@ -320,9 +319,9 @@ def display_win_screen():
                         topScores_surface = pygame.Surface((width, height), pygame.SRCALPHA)
                         alpha_value = 0
                         topScores_surface.fill((255, 255, 255, alpha_value))  # Create a surface to blit the scores
-                        font = pygame.font.SysFont(None, 36)  # Choose a font and size
+                        
                         for i, score in enumerate(topScores):
-                            text_surface = munro_font.render(score, True, (255, 212, 47))  # Render the text
+                            text_surface = munro_font.render(f'{score}s', True, (255, 212, 47))  # Render the text
                             topScores_surface.blit(text_surface, (0, i * 32 - scale * (duration - ticks)))  # Blit the text onto the surface
                             
 
@@ -392,7 +391,7 @@ def display_loss_screen():
                     difficulty_color = colors[difficulty]
                     
                     if ticks < duration:
-                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty.capitalize(), True, difficulty_color)
                         loss_text = munro_font.render("You Lose!", True, (255, 0, 0))
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200 - scale*(duration - ticks)))
                         screen.blit(loss_text, (300 - loss_text.get_width() // 2, 100 - scale2*(duration - ticks)))
@@ -653,6 +652,15 @@ def drawTopPanel():
             explosion_sfx.set_volume(1)
             flag_sfx.set_volume(1)
             pygame.time.delay(120)
+
+    if gameOver:
+        smallfont = pygame.font.Font("Font/munro.ttf", 20)
+        gameOverText = smallfont.render('Click anywhere to skip',False,(220,20,60))
+        gameOverRect = gameOverText.get_rect()
+        gameOverRect.center = (width/2,80)
+        screen.blit(gameOverText,gameOverRect)
+        print('a')
+            
 
 def findNeighbours(row,col,totalRows,totalCols): #find all 9 neighbours around a cell
     neighbours = []
@@ -1045,6 +1053,7 @@ while run:
             time += 1
 
         if event.type == pygame.USEREVENT and gameOver and not gridRevealed:
+
             try:
                 while playerField[revealRow][revealCol] == 1:
                     revealCol += 1
