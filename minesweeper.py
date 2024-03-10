@@ -331,7 +331,7 @@ def display_win_screen():
 
                     else:
                         # Display difficulty
-                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty.capitalize(), True, difficulty_color)
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
                         
                         #time taken
@@ -434,7 +434,7 @@ def display_loss_screen():
 
                     else:
                         # Display difficulty
-                        difficulty_text = munro_font.render("Difficulty: " + difficulty, True, difficulty_color)
+                        difficulty_text = munro_font.render("Difficulty: " + difficulty.capitalize(), True, difficulty_color)
                         screen.blit(difficulty_text, (300 - difficulty_text.get_width() // 2, 200))
 
                         #loss text
